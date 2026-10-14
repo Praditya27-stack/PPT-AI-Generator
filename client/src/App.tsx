@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { PresentationDeck, PresentationTheme } from './types/presentation';
+import type { PresentationDeck, PresentationTheme, Slide } from './types/presentation';
 import { Navbar } from './components/Navbar';
 import { SlideViewer } from './components/SlideViewer';
+import { SlideEditor } from './components/SlideEditor';
 import { ThumbnailStrip } from './components/ThumbnailStrip';
 import { PromptModal } from './components/PromptModal';
 import {
   ChevronLeft,
   ChevronRight,
   AlertCircle,
-  Maximize2
+  Maximize2,
+  Edit3
 } from 'lucide-react';
 
 // Default initial high-impact deck
@@ -117,6 +119,8 @@ export function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [isEditingMode, setIsEditingMode] = useState(false);
+  const [isRefining, setIsRefining] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Apply theme to document body
@@ -182,6 +186,108 @@ export function App() {
     }
   };
 
+  // Refine an individual slide (Shorten, Expand, Change Layout)
+  const handleRefineSlide = async (
+    action: 'shorten' | 'expand' | 'rewrite' | 'change_layout',
+    targetLayout?: string
+  ) => {
+    const currentSlide = deck.slides[currentSlideIndex];
+    if (!currentSlide || isRefining) return;
+
+    setIsRefining(true);
+    setErrorMessage(null);
+    try {
+      const response = await fetch('/api/refine-slide', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          slide: currentSlide,
+          action,
+          targetLayout,
+          language: 'id'
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.details || errorData.error || `HTTP ${response.status}`);
+      }
+
+      const refinedSlide: Slide = await response.json();
+      
+      // Update deck in place
+      const updatedSlides = [...deck.slides];
+      updatedSlides[currentSlideIndex] = refinedSlide;
+      setDeck({ ...deck, slides: updatedSlides });
+    } catch (err) {
+      console.error('Refine Error:', err);
+      setErrorMessage(`Gagal refine slide: ${(err as Error).message}`);
+    } finally {
+      setIsRefining(false);
+    }
+  };
+
+  // Direct edit of current slide
+  const handleUpdateSlide = (updatedSlide: Slide) => {
+    const updatedSlides = [...deck.slides];
+    updatedSlides[currentSlideIndex] = updatedSlide;
+    setDeck({ ...deck, slides: updatedSlides });
+  };
+
+  // Add Slide
+  const handleAddSlide = () => {
+    const newSlideNumber = currentSlideIndex + 2;
+    const newSlide: Slide = {
+      id: `slide-${Date.now()}`,
+      slideNumber: newSlideNumber,
+      layout: 'cards',
+      title: 'Judul Analisis Tambahan',
+      subtitle: 'Rincian aspek pendukung untuk memperkuat argumen presentasi',
+      content: {
+        cards: [
+          { title: 'Aspek 1', description: 'Uraian mekanisme konkret dan dapat diukur.', iconName: 'zap' },
+          { title: 'Aspek 2', description: 'Dampak operasional serta mitigasi risiko.', iconName: 'shield' }
+        ]
+      }
+    };
+
+    const updatedSlides = [...deck.slides];
+    updatedSlides.splice(currentSlideIndex + 1, 0, newSlide);
+
+    // Re-index slide numbers
+    const reindexed = updatedSlides.map((s, idx) => ({ ...s, slideNumber: idx + 1 }));
+    setDeck({ ...deck, slides: reindexed });
+    setCurrentSlideIndex(currentSlideIndex + 1);
+  };
+
+  // Delete Slide
+  const handleDeleteSlide = () => {
+    if (deck.slides.length <= 1) {
+      setErrorMessage('Presentasi minimal harus memiliki 1 slide.');
+      return;
+    }
+
+    const updatedSlides = deck.slides.filter((_, idx) => idx !== currentSlideIndex);
+    const reindexed = updatedSlides.map((s, idx) => ({ ...s, slideNumber: idx + 1 }));
+    setDeck({ ...deck, slides: reindexed });
+    setCurrentSlideIndex(Math.max(0, currentSlideIndex - 1));
+  };
+
+  // Move Slide Order
+  const handleMoveSlide = (direction: 'up' | 'down') => {
+    const targetIdx = direction === 'up' ? currentSlideIndex - 1 : currentSlideIndex + 1;
+    if (targetIdx < 0 || targetIdx >= deck.slides.length) return;
+
+    const updatedSlides = [...deck.slides];
+    const temp = updatedSlides[currentSlideIndex];
+    updatedSlides[currentSlideIndex] = updatedSlides[targetIdx];
+    updatedSlides[targetIdx] = temp;
+
+    const reindexed = updatedSlides.map((s, idx) => ({ ...s, slideNumber: idx + 1 }));
+    setDeck({ ...deck, slides: reindexed });
+    setCurrentSlideIndex(targetIdx);
+  };
+
   // Export Deck to .PPTX
   const handleExportPPTX = async () => {
     if (!deck || isExporting) return;
@@ -237,6 +343,8 @@ export function App() {
         currentTheme={deck.theme}
         onThemeChange={handleThemeChange}
         hasDeck={!!deck}
+        isEditingMode={isEditingMode}
+        onToggleEditingMode={() => setIsEditingMode(!isEditingMode)}
       />
 
       {/* Main Slide Presentation Stage */}
@@ -286,11 +394,11 @@ export function App() {
         <div
           style={{
             width: '100%',
-            maxWidth: '1200px',
+            maxWidth: '1280px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '1.5rem',
+            gap: '1.25rem',
             position: 'relative'
           }}
         >
@@ -307,15 +415,55 @@ export function App() {
               borderRadius: '50%',
               justifyContent: 'center',
               opacity: currentSlideIndex === 0 ? 0.3 : 1,
-              cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer'
+              cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
+              flexShrink: 0
             }}
           >
             <ChevronLeft size={22} />
           </button>
 
-          {/* Active Slide Viewer */}
+          {/* Active Slide Stage: Editor vs Viewer */}
           {currentSlide && (
-            <SlideViewer slide={currentSlide} deckTitle={deck.title} />
+            isEditingMode ? (
+              <SlideEditor
+                slide={currentSlide}
+                deckTitle={deck.title}
+                isRefining={isRefining}
+                onUpdateSlide={handleUpdateSlide}
+                onRefineSlide={handleRefineSlide}
+                onAddSlide={handleAddSlide}
+                onDeleteSlide={handleDeleteSlide}
+                onMoveSlide={handleMoveSlide}
+                canMoveUp={currentSlideIndex > 0}
+                canMoveDown={currentSlideIndex < deck.slides.length - 1}
+                onDoneEditing={() => setIsEditingMode(false)}
+              />
+            ) : (
+              <div style={{ position: 'relative', width: '100%', maxWidth: '1100px' }}>
+                <SlideViewer slide={currentSlide} deckTitle={deck.title} />
+                
+                {/* Quick Edit Overlay Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsEditingMode(true)}
+                  className="btn-secondary"
+                  style={{
+                    position: 'absolute',
+                    top: '16px',
+                    right: '16px',
+                    padding: '6px 12px',
+                    fontSize: '0.8rem',
+                    background: 'rgba(15, 23, 42, 0.85)',
+                    backdropFilter: 'blur(8px)',
+                    borderColor: 'var(--accent)'
+                  }}
+                  title="Buka alat kustomisasi & AI Co-pilot untuk slide ini"
+                >
+                  <Edit3 size={14} style={{ color: 'var(--accent)' }} />
+                  <span>Kustomisasi Slide</span>
+                </button>
+              </div>
+            )
           )}
 
           {/* Next Button */}
@@ -331,7 +479,8 @@ export function App() {
               borderRadius: '50%',
               justifyContent: 'center',
               opacity: currentSlideIndex === deck.slides.length - 1 ? 0.3 : 1,
-              cursor: currentSlideIndex === deck.slides.length - 1 ? 'not-allowed' : 'pointer'
+              cursor: currentSlideIndex === deck.slides.length - 1 ? 'not-allowed' : 'pointer',
+              flexShrink: 0
             }}
           >
             <ChevronRight size={22} />

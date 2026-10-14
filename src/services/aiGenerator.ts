@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { PresentationDeck, PresentationDeckSchema } from '../types/presentation.js';
+import { PresentationDeck, PresentationDeckSchema, Slide, SlideSchema } from '../types/presentation.js';
 import { extractAndParseJSON } from './jsonRepair.js';
 
 dotenv.config();
@@ -195,3 +195,101 @@ Remember:
     throw error;
   }
 }
+
+export interface RefineSlideOptions {
+  slide: Slide;
+  action: 'shorten' | 'expand' | 'rewrite' | 'change_layout';
+  targetLayout?: 'hero' | 'cards' | 'stats' | 'timeline' | 'callout';
+  customInstruction?: string;
+  language?: 'id' | 'en';
+}
+
+export async function refineSlide(options: RefineSlideOptions): Promise<Slide> {
+  const { slide, action, targetLayout, customInstruction, language = 'id' } = options;
+  const layout = targetLayout || slide.layout;
+
+  let taskDescription = '';
+  if (action === 'shorten') {
+    taskDescription = 'PERPENDEK (CONDENSE): Buat konten jauh lebih ringkas, padat, dan to the point. Pangkas kata-kata berlebihan. Headline maks 6-8 kata, deskripsi tiap poin maks 8-10 kata. Bebas basa-basi.';
+  } else if (action === 'expand') {
+    taskDescription = 'PERPANJANG (ELABORATE): Tambahkan kedalaman operasional, rincian mekanisme konkret, atau konteks strategis yang relevan. Dilarang menambah kata klise/basa-basi AI; tambahkan fakta, metrik, atau langkah aksi nyata.';
+  } else if (action === 'change_layout') {
+    taskDescription = `GANTI LAYOUT: Konversi data slide ini ke dalam layout baru '${layout}'. Restrukturisasi konten agar pas dengan layout '${layout}' (misal: jika ke stats, masukkan metrik angka konkret; jika ke timeline, buat tahapan berurutan).`;
+  } else {
+    taskDescription = customInstruction || 'PERBAIKI KONTEN: Perjelas nilai utama, tingkatkan kosakata profesional, dan pastikan nada eksekutif.';
+  }
+
+  const prompt = `Refine this individual slide according to the strict 'antislop' rules (Zero empty AI words, no significance inflation, evidence over claims).
+
+CURRENT SLIDE (JSON):
+${JSON.stringify(slide, null, 2)}
+
+INSTRUCTION:
+${taskDescription}
+Target Layout: "${layout}"
+Language: "${language === 'id' ? 'Bahasa Indonesia (formal, tajam, kosakata eksekutif)' : 'English (executive, concise, punchy)'}"
+
+Return ONLY a single valid JSON object for this Slide matching the SlideSchema:
+{
+  "id": "${slide.id}",
+  "slideNumber": ${slide.slideNumber},
+  "layout": "${layout}",
+  "title": "Action Headline",
+  "subtitle": "Supporting subtitle",
+  "content": { ... matching layout "${layout}" ... }
+}`;
+
+  const requestBody = {
+    model: ROUTER_MODEL,
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: prompt }
+    ],
+    temperature: 0.5,
+    stream: false
+  };
+
+  const endpoint = `${ROUTER_BASE_URL}/chat/completions`;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${ROUTER_API_KEY}`
+      },
+      body: JSON.stringify(requestBody),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`9router request failed (${response.status}): ${errText}`);
+    }
+
+    const data = await response.json() as { choices: Array<{ message: { content: string } }> };
+    const rawContent = data.choices?.[0]?.message?.content;
+
+    if (!rawContent) {
+      throw new Error('AI returned an empty slide refinement.');
+    }
+
+    const parsedData = extractAndParseJSON(rawContent);
+    const validatedSlide = SlideSchema.parse(parsedData);
+    validatedSlide.id = slide.id;
+    validatedSlide.slideNumber = slide.slideNumber;
+
+    return validatedSlide;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if ((error as Error).name === 'AbortError') {
+      throw new Error('Request to 9router timed out after 60 seconds.');
+    }
+    throw error;
+  }
+}
+

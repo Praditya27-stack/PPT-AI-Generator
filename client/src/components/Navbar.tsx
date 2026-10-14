@@ -1,6 +1,6 @@
 import React from 'react';
 import type { PresentationTheme } from '../types/presentation';
-import { Download, Plus, Server, Sparkles, Sliders } from 'lucide-react';
+import { Download, Plus, Server, Sparkles, Sliders, Edit3, Eye } from 'lucide-react';
 
 interface NavbarProps {
   onNewPresentation: () => void;
@@ -9,6 +9,8 @@ interface NavbarProps {
   currentTheme: PresentationTheme;
   onThemeChange: (theme: PresentationTheme) => void;
   hasDeck: boolean;
+  isEditingMode: boolean;
+  onToggleEditingMode: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -17,7 +19,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   isExporting,
   currentTheme,
   onThemeChange,
-  hasDeck
+  hasDeck,
+  isEditingMode,
+  onToggleEditingMode
 }) => {
   return (
     <header
@@ -37,7 +41,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           margin: '0 auto',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px'
         }}
       >
         {/* Brand / Logo */}
@@ -94,13 +100,36 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
             >
               <Server size={11} style={{ color: '#10B981' }} />
-              <span>NAT VPS 9router • Gemini 3.8 Flash • RAM &lt;60MB</span>
+              <span>NAT VPS 9router • Gemini 3.8 Flash • Anti-Slop System</span>
             </div>
           </div>
         </div>
 
         {/* Right Action Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {/* Mode Toggle: Presentasi vs Kustomisasi */}
+          {hasDeck && (
+            <button
+              type="button"
+              className={isEditingMode ? 'btn-primary' : 'btn-secondary'}
+              onClick={onToggleEditingMode}
+              style={{ padding: '8px 16px', fontSize: '0.85rem' }}
+              title={isEditingMode ? 'Beralih ke tampilan tayang' : 'Edit teks, tata letak, dan panggil AI'}
+            >
+              {isEditingMode ? (
+                <>
+                  <Eye size={16} />
+                  <span>Mode Tayang</span>
+                </>
+              ) : (
+                <>
+                  <Edit3 size={16} />
+                  <span>Kustomisasi Slide</span>
+                </>
+              )}
+            </button>
+          )}
+
           {/* Theme Selector */}
           <div
             style={{
@@ -136,7 +165,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* New Deck Button */}
-          <button className="btn-secondary" onClick={onNewPresentation}>
+          <button className="btn-secondary" onClick={onNewPresentation} style={{ padding: '8px 14px' }}>
             <Plus size={16} />
             <span>Topik Baru</span>
           </button>
@@ -147,7 +176,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="btn-primary"
               onClick={onExportPPTX}
               disabled={isExporting}
-              style={{ minWidth: '150px', justifyContent: 'center' }}
+              style={{ minWidth: '140px', justifyContent: 'center' }}
             >
               <Download size={16} />
               <span>{isExporting ? 'Exporting...' : 'Unduh .PPTX'}</span>

@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import { generateDeck } from './services/aiGenerator.js';
+import { generateDeck, refineSlide } from './services/aiGenerator.js';
 import { exportToPPTX } from './services/pptxExporter.js';
 import { PresentationDeckSchema } from './types/presentation.js';
 
@@ -57,6 +57,41 @@ app.post('/api/generate', async (req: Request, res: Response) => {
     console.error('[AI-GEN Error]:', error);
     res.status(500).json({
       error: 'Failed to generate presentation deck.',
+      details: (error as Error).message
+    });
+  }
+});
+
+// Endpoint: Refine an individual slide (Shorten, Expand, Change Layout, Rewrite)
+app.post('/api/refine-slide', async (req: Request, res: Response) => {
+  try {
+    const { slide, action, targetLayout, customInstruction, language } = req.body;
+
+    if (!slide || !slide.layout || !slide.content) {
+      res.status(400).json({ error: 'Valid slide object is required.' });
+      return;
+    }
+
+    if (!action || !['shorten', 'expand', 'rewrite', 'change_layout'].includes(action)) {
+      res.status(400).json({ error: 'Valid action (shorten, expand, rewrite, change_layout) is required.' });
+      return;
+    }
+
+    console.log(`[AI-REFINE] Refining slide ${slide.slideNumber} with action "${action}"...`);
+    const refinedSlide = await refineSlide({
+      slide,
+      action,
+      targetLayout,
+      customInstruction,
+      language: language || 'id'
+    });
+
+    console.log(`[AI-REFINE] Success! Refined slide ${slide.slideNumber} (${refinedSlide.layout}).`);
+    res.json(refinedSlide);
+  } catch (error) {
+    console.error('[AI-REFINE Error]:', error);
+    res.status(500).json({
+      error: 'Failed to refine slide.',
       details: (error as Error).message
     });
   }
