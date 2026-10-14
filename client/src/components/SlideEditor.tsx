@@ -15,18 +15,16 @@ import {
   Trash2,
   ArrowUp,
   ArrowDown,
-  Sparkles,
   Check,
-  Zap,
   Shield,
   Cpu,
   BarChart3,
   TrendingUp,
-  Rocket,
   Layers,
   Activity,
   CheckCircle2,
-  Quote
+  Quote,
+  Zap
 } from 'lucide-react';
 
 interface SlideEditorProps {
@@ -43,18 +41,16 @@ interface SlideEditorProps {
   onDoneEditing: () => void;
 }
 
-const getIcon = (iconName?: string) => {
+const getSemanticIcon = (iconName?: string) => {
   const name = (iconName || '').toLowerCase();
-  if (name.includes('zap') || name.includes('speed') || name.includes('auto')) return <Zap size={22} />;
-  if (name.includes('shield') || name.includes('sec')) return <Shield size={22} />;
-  if (name.includes('cpu') || name.includes('ai') || name.includes('tech')) return <Cpu size={22} />;
-  if (name.includes('bar') || name.includes('chart') || name.includes('data')) return <BarChart3 size={22} />;
-  if (name.includes('trend') || name.includes('grow')) return <TrendingUp size={22} />;
-  if (name.includes('rocket') || name.includes('launch')) return <Rocket size={22} />;
-  if (name.includes('layer')) return <Layers size={22} />;
-  if (name.includes('activity')) return <Activity size={22} />;
-  if (name.includes('check')) return <CheckCircle2 size={22} />;
-  return <Sparkles size={22} />;
+  if (name.includes('shield') || name.includes('sec')) return <Shield size={18} />;
+  if (name.includes('cpu') || name.includes('ai') || name.includes('tech')) return <Cpu size={18} />;
+  if (name.includes('bar') || name.includes('chart') || name.includes('data')) return <BarChart3 size={18} />;
+  if (name.includes('trend') || name.includes('grow')) return <TrendingUp size={18} />;
+  if (name.includes('zap') || name.includes('speed')) return <Zap size={18} />;
+  if (name.includes('layer')) return <Layers size={18} />;
+  if (name.includes('activity')) return <Activity size={18} />;
+  return <CheckCircle2 size={18} />;
 };
 
 export const SlideEditor: React.FC<SlideEditorProps> = ({
@@ -70,7 +66,6 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
   canMoveDown,
   onDoneEditing
 }) => {
-  // Helpers to update slide fields
   const handleTitleChange = (newTitle: string) => {
     onUpdateSlide({ ...slide, title: newTitle });
   };
@@ -84,121 +79,115 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '1100px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {/* AI Quick Actions Toolbar */}
+    <div style={{ width: '100%', maxWidth: '1050px', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+      {/* Editor Command Toolbar */}
       <div
-        className="glass-panel"
+        className="studio-panel"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '8px',
-          padding: '0.75rem 1.25rem',
-          borderRadius: '16px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          border: '1px solid var(--accent)'
+          padding: '0.65rem 1rem'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        {/* Left AI Refine Tools */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
           <span
             style={{
               fontSize: '0.75rem',
-              fontWeight: 800,
-              color: 'var(--accent)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              marginRight: '6px'
+              fontWeight: 700,
+              color: 'var(--text-secondary)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.04em',
+              marginRight: '4px'
             }}
           >
-            <Sparkles size={14} /> AI CO-PILOT:
+            Refinemen AI:
           </span>
 
-          {/* Perpendek Button */}
+          {/* Perpendek */}
           <button
             type="button"
             className="btn-secondary"
             disabled={isRefining}
             onClick={() => onRefineSlide('shorten')}
-            style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: '8px' }}
-            title="Pangkas kata berlebih dan buat pesan lebih tajam"
+            style={{ padding: '6px 10px', fontSize: '0.8rem' }}
+            title="Pangkas teks dan buat kalimat lebih padat"
           >
-            <Scissors size={14} style={{ color: 'var(--accent)' }} />
+            <Scissors size={13} />
             <span>{isRefining ? 'Memproses...' : 'Perpendek'}</span>
           </button>
 
-          {/* Perpanjang Button */}
+          {/* Perpanjang */}
           <button
             type="button"
             className="btn-secondary"
             disabled={isRefining}
             onClick={() => onRefineSlide('expand')}
-            style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: '8px' }}
-            title="Tambahkan rincian operasional dan kedalaman mekanisme"
+            style={{ padding: '6px 10px', fontSize: '0.8rem' }}
+            title="Tambah detail operasional dan konteks nyata"
           >
-            <FileText size={14} style={{ color: 'var(--accent-secondary)' }} />
+            <FileText size={13} />
             <span>{isRefining ? 'Memproses...' : 'Perpanjang'}</span>
           </button>
 
-          {/* Ubah Layout Dropdown */}
+          {/* Ubah Layout */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <LayoutGrid size={14} style={{ color: 'var(--text-muted)' }} />
+            <LayoutGrid size={13} style={{ color: 'var(--text-muted)' }} />
             <select
               value={slide.layout}
               disabled={isRefining}
               onChange={(e) => onRefineSlide('change_layout', e.target.value)}
               style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid var(--border-card)',
+                backgroundColor: 'var(--bg-surface-elevated)',
+                border: '1px solid var(--border-subtle)',
                 color: 'var(--text-primary)',
-                padding: '6px 10px',
-                borderRadius: '8px',
+                padding: '5px 8px',
                 fontSize: '0.8rem',
-                outline: 'none',
                 cursor: 'pointer'
               }}
             >
-              <option value="hero" style={{ background: '#0F172A' }}>Layout: Hero</option>
-              <option value="cards" style={{ background: '#0F172A' }}>Layout: Cards (2-4 Kolom)</option>
-              <option value="stats" style={{ background: '#0F172A' }}>Layout: Stats (Angka Besar)</option>
-              <option value="timeline" style={{ background: '#0F172A' }}>Layout: Timeline (Roadmap)</option>
-              <option value="callout" style={{ background: '#0F172A' }}>Layout: Callout (Kutipan)</option>
+              <option value="hero">Layout: Hero</option>
+              <option value="cards">Layout: Cards (2-4 Kolom)</option>
+              <option value="stats">Layout: Stats (Angka)</option>
+              <option value="timeline">Layout: Timeline</option>
+              <option value="callout">Layout: Callout</option>
             </select>
           </div>
         </div>
 
-        {/* Slide Management (Move, Add, Delete, Done) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        {/* Right Slide Management */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
           <button
             type="button"
             className="btn-secondary"
             onClick={() => onMoveSlide('up')}
             disabled={!canMoveUp || isRefining}
-            style={{ padding: '6px 10px', borderRadius: '8px' }}
-            title="Geser Slide ke Kiri / Atas"
+            style={{ padding: '6px 8px' }}
+            title="Geser Slide ke Kiri"
           >
-            <ArrowUp size={14} />
+            <ArrowUp size={13} />
           </button>
           <button
             type="button"
             className="btn-secondary"
             onClick={() => onMoveSlide('down')}
             disabled={!canMoveDown || isRefining}
-            style={{ padding: '6px 10px', borderRadius: '8px' }}
-            title="Geser Slide ke Kanan / Bawah"
+            style={{ padding: '6px 8px' }}
+            title="Geser Slide ke Kanan"
           >
-            <ArrowDown size={14} />
+            <ArrowDown size={13} />
           </button>
           <button
             type="button"
             className="btn-secondary"
             onClick={onAddSlide}
             disabled={isRefining}
-            style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: '8px' }}
-            title="Tambah Slide Baru"
+            style={{ padding: '6px 10px', fontSize: '0.8rem' }}
           >
-            <Plus size={14} />
+            <Plus size={13} />
             <span>Tambah</span>
           </button>
           <button
@@ -206,69 +195,61 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
             className="btn-secondary"
             onClick={onDeleteSlide}
             disabled={isRefining}
-            style={{ padding: '6px 10px', borderRadius: '8px', color: '#F87171', borderColor: 'rgba(239, 68, 68, 0.4)' }}
+            style={{ padding: '6px 8px', color: 'var(--danger)', borderColor: 'var(--border-subtle)' }}
             title="Hapus Slide Ini"
           >
-            <Trash2 size={14} />
+            <Trash2 size={13} />
           </button>
 
-          {/* Gini Aja (Selesai) Button */}
+          {/* Selesai / Gini Aja */}
           <button
             type="button"
             className="btn-primary"
             onClick={onDoneEditing}
-            style={{ padding: '6px 14px', fontSize: '0.82rem', borderRadius: '8px' }}
-            title="Simpan kustomisasi dan kembali ke tampilan deck"
+            style={{ padding: '6px 12px', fontSize: '0.8rem' }}
           >
-            <Check size={14} />
-            <span>Gini Aja (Selesai)</span>
+            <Check size={13} />
+            <span>Selesai (Gini Aja)</span>
           </button>
         </div>
       </div>
 
-      {/* Main Slide Editor Stage Container */}
-      <div className="slide-stage-container animate-slide" style={{ position: 'relative' }}>
-        {/* Editing indicator pill */}
+      {/* Main Slide Stage (Editable) */}
+      <div className="slide-stage-container" style={{ position: 'relative' }}>
+        {/* Subtle edit notice */}
         <div
           style={{
             position: 'absolute',
             top: '12px',
             right: '16px',
-            fontSize: '0.65rem',
-            fontWeight: 800,
-            letterSpacing: '0.08em',
-            background: 'rgba(6, 182, 212, 0.15)',
-            border: '1px solid var(--accent)',
-            color: 'var(--accent)',
-            padding: '2px 8px',
-            borderRadius: '4px',
-            textTransform: 'uppercase'
+            fontSize: '0.7rem',
+            color: 'var(--text-muted)'
           }}
         >
-          ✏️ Mode Edit Langsung (Klik teks untuk mengubah)
+          Klik bidang teks untuk mengedit langsung
         </div>
 
-        {/* Slide Header (for non-hero slides) */}
+        {/* Slide Header */}
         {slide.layout !== 'hero' && (
           <div style={{ marginBottom: '1.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <span
                 style={{
-                  fontSize: '0.75rem',
+                  fontSize: '0.72rem',
                   fontWeight: 700,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                  padding: '4px 10px',
-                  borderRadius: '6px',
-                  background: 'var(--badge-bg)',
-                  color: 'var(--badge-text)',
-                  border: '1px solid var(--accent)'
+                  letterSpacing: '0.06em',
+                  padding: '3px 8px',
+                  borderRadius: '4px',
+                  backgroundColor: 'var(--accent-surface)',
+                  color: 'var(--accent-text)',
+                  border: '1px solid var(--border-subtle)'
                 }}
               >
                 {slide.layout}
               </span>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                • Slide {slide.slideNumber}
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                Slide {slide.slideNumber}
               </span>
             </div>
 
@@ -277,17 +258,12 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
               type="text"
               value={slide.title}
               onChange={(e) => handleTitleChange(e.target.value)}
-              placeholder="Judul Slide (Action Headline)..."
+              placeholder="Judul Slide (Action Statement)..."
               style={{
                 width: '100%',
-                fontSize: '1.85rem',
+                fontSize: '1.75rem',
                 fontWeight: 800,
                 color: 'var(--text-primary)',
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px dashed var(--border-card)',
-                borderRadius: '8px',
-                padding: '6px 10px',
-                outline: 'none',
                 marginBottom: '6px'
               }}
             />
@@ -297,22 +273,17 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
               type="text"
               value={slide.subtitle || ''}
               onChange={(e) => handleSubtitleChange(e.target.value)}
-              placeholder="Subjudul atau konteks pendukung..."
+              placeholder="Subjudul atau penjelasan pendukung..."
               style={{
                 width: '100%',
-                fontSize: '1rem',
-                color: 'var(--text-secondary)',
-                background: 'rgba(255, 255, 255, 0.02)',
-                border: '1px dashed var(--border-card)',
-                borderRadius: '6px',
-                padding: '4px 8px',
-                outline: 'none'
+                fontSize: '0.95rem',
+                color: 'var(--text-secondary)'
               }}
             />
           </div>
         )}
 
-        {/* Slide Layout Editable Body */}
+        {/* Slide Content Body */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           {slide.layout === 'hero' && (
             <EditableHeroLayout
@@ -348,7 +319,7 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
           )}
         </div>
 
-        {/* Slide Footer */}
+        {/* Footer */}
         <div
           style={{
             marginTop: 'auto',
@@ -356,7 +327,7 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '1px solid var(--border-subtle)',
             fontSize: '0.8rem',
             color: 'var(--text-muted)'
           }}
@@ -369,7 +340,7 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
   );
 };
 
-// 1. Editable Hero Layout
+// 1. Hero
 const EditableHeroLayout: React.FC<{
   content: HeroContent;
   title: string;
@@ -377,26 +348,21 @@ const EditableHeroLayout: React.FC<{
   onContentChange: (newContent: HeroContent) => void;
 }> = ({ content, title, onTitleChange, onContentChange }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem 0' }}>
-      {/* Badge */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', padding: '0.5rem 0' }}>
       <input
         type="text"
-        value={content.badge || 'EXECUTIVE BRIEFING'}
+        value={content.badge || 'STRATEGIC BRIEFING'}
         onChange={(e) => onContentChange({ ...content, badge: e.target.value })}
         style={{
           width: 'fit-content',
-          padding: '4px 12px',
-          borderRadius: '20px',
-          background: 'var(--badge-bg)',
-          color: 'var(--badge-text)',
-          fontSize: '0.8rem',
+          padding: '4px 10px',
+          fontSize: '0.75rem',
           fontWeight: 700,
-          border: '1px solid var(--accent)',
-          outline: 'none'
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em'
         }}
       />
 
-      {/* Main Headline */}
       <textarea
         value={content.headline || title}
         onChange={(e) => {
@@ -404,63 +370,46 @@ const EditableHeroLayout: React.FC<{
           onContentChange({ ...content, headline: e.target.value });
         }}
         rows={2}
-        placeholder="Hero Headline (Grand Statement)..."
+        placeholder="Judul Utama (Statement Tajam)..."
         style={{
           width: '100%',
-          fontSize: '2.5rem',
+          fontSize: '2.4rem',
           fontWeight: 900,
           color: 'var(--text-primary)',
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px dashed var(--border-card)',
-          borderRadius: '12px',
-          padding: '10px',
-          outline: 'none',
           resize: 'none'
         }}
       />
 
-      {/* Subheadline */}
       <textarea
         value={content.subheadline || ''}
         onChange={(e) => onContentChange({ ...content, subheadline: e.target.value })}
         rows={2}
-        placeholder="Subheadline atau proposisi nilai..."
+        placeholder="Penjelasan proposisi nilai..."
         style={{
           width: '100%',
           fontSize: '1.15rem',
           color: 'var(--text-secondary)',
-          background: 'rgba(255, 255, 255, 0.02)',
-          border: '1px dashed var(--border-card)',
-          borderRadius: '8px',
-          padding: '8px',
-          outline: 'none',
           resize: 'none'
         }}
       />
 
-      {/* Author */}
       <input
         type="text"
         value={content.author || ''}
         onChange={(e) => onContentChange({ ...content, author: e.target.value })}
-        placeholder="Nama Presenter / Tim..."
+        placeholder="Presenter atau Tim Penyusun..."
         style={{
           width: 'fit-content',
-          fontSize: '0.9rem',
-          color: 'var(--accent)',
-          fontWeight: 600,
-          background: 'transparent',
-          border: '1px dashed var(--border-card)',
-          borderRadius: '6px',
-          padding: '4px 8px',
-          outline: 'none'
+          fontSize: '0.85rem',
+          color: 'var(--accent-text)',
+          fontWeight: 600
         }}
       />
     </div>
   );
 };
 
-// 2. Editable Cards Layout
+// 2. Cards
 const EditableCardsLayout: React.FC<{
   content: CardsContent;
   onContentChange: (newContent: CardsContent) => void;
@@ -483,7 +432,7 @@ const EditableCardsLayout: React.FC<{
     onContentChange({
       cards: [
         ...cards,
-        { title: 'Poin Baru', description: 'Deskripsi ringkas dan padat untuk poin baru ini.', iconName: 'sparkles' }
+        { title: 'Poin Baru', description: 'Deskripsi ringkas mekanisme poin.', iconName: 'layers' }
       ]
     });
   };
@@ -494,7 +443,7 @@ const EditableCardsLayout: React.FC<{
         style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${cards.length <= 2 ? 2 : cards.length === 3 ? 3 : 4}, 1fr)`,
-          gap: '1.25rem',
+          gap: '1rem',
           width: '100%'
         }}
       >
@@ -502,16 +451,15 @@ const EditableCardsLayout: React.FC<{
           <div
             key={idx}
             style={{
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px dashed var(--border-card)',
-              borderRadius: '16px',
+              backgroundColor: 'var(--bg-surface-elevated)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: '6px',
               padding: '1.25rem',
               display: 'flex',
               flexDirection: 'column',
               position: 'relative'
             }}
           >
-            {/* Delete card button if more than 2 */}
             {cards.length > 2 && (
               <button
                 type="button"
@@ -522,11 +470,11 @@ const EditableCardsLayout: React.FC<{
                   right: '8px',
                   background: 'none',
                   border: 'none',
-                  color: '#F87171',
+                  color: 'var(--text-muted)',
                   cursor: 'pointer',
-                  fontSize: '0.75rem'
+                  fontSize: '0.8rem'
                 }}
-                title="Hapus Kartu Ini"
+                title="Hapus Kartu"
               >
                 ✕
               </button>
@@ -534,18 +482,18 @@ const EditableCardsLayout: React.FC<{
 
             <div
               style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '8px',
-                background: 'var(--badge-bg)',
-                color: 'var(--accent)',
+                width: '32px',
+                height: '32px',
+                borderRadius: '4px',
+                backgroundColor: 'var(--accent-surface)',
+                color: 'var(--accent-text)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: '0.75rem'
               }}
             >
-              {getIcon(card.iconName)}
+              {getSemanticIcon(card.iconName)}
             </div>
 
             <input
@@ -554,14 +502,8 @@ const EditableCardsLayout: React.FC<{
               onChange={(e) => updateCard(idx, 'title', e.target.value)}
               placeholder="Judul Kartu..."
               style={{
-                fontSize: '1.1rem',
+                fontSize: '1.05rem',
                 fontWeight: 700,
-                color: 'var(--text-primary)',
-                background: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid var(--border-card)',
-                borderRadius: '6px',
-                padding: '4px 8px',
-                outline: 'none',
                 marginBottom: '0.5rem'
               }}
             />
@@ -574,11 +516,6 @@ const EditableCardsLayout: React.FC<{
               style={{
                 fontSize: '0.85rem',
                 color: 'var(--text-secondary)',
-                background: 'rgba(255, 255, 255, 0.02)',
-                border: '1px solid var(--border-card)',
-                borderRadius: '6px',
-                padding: '6px',
-                outline: 'none',
                 resize: 'none'
               }}
             />
@@ -593,25 +530,25 @@ const EditableCardsLayout: React.FC<{
           style={{
             marginTop: '10px',
             background: 'none',
-            border: '1px dashed var(--accent)',
-            color: 'var(--accent)',
-            borderRadius: '8px',
-            padding: '4px 12px',
-            fontSize: '0.8rem',
+            border: '1px dashed var(--border-strong)',
+            color: 'var(--accent-text)',
+            borderRadius: '4px',
+            padding: '4px 10px',
+            fontSize: '0.78rem',
             cursor: 'pointer',
             display: 'inline-flex',
             alignItems: 'center',
             gap: '4px'
           }}
         >
-          <Plus size={14} /> Tambah Kolom Kartu
+          <Plus size={13} /> Tambah Kolom Kartu
         </button>
       )}
     </div>
   );
 };
 
-// 3. Editable Stats Layout
+// 3. Stats
 const EditableStatsLayout: React.FC<{
   content: StatsContent;
   onContentChange: (newContent: StatsContent) => void;
@@ -629,7 +566,7 @@ const EditableStatsLayout: React.FC<{
       style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${stats.length <= 2 ? 2 : stats.length === 3 ? 3 : 4}, 1fr)`,
-        gap: '1.25rem',
+        gap: '1rem',
         width: '100%'
       }}
     >
@@ -637,56 +574,42 @@ const EditableStatsLayout: React.FC<{
         <div
           key={idx}
           style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px dashed var(--border-card)',
-            borderRadius: '16px',
+            backgroundColor: 'var(--bg-surface-elevated)',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: '6px',
             padding: '1.5rem 1rem',
             textAlign: 'center',
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px'
+            gap: '6px'
           }}
         >
-          {/* Editable Big Metric */}
           <input
             type="text"
+            className="font-mono"
             value={stat.value}
             onChange={(e) => updateStat(idx, 'value', e.target.value)}
             placeholder="85%+"
             style={{
-              fontSize: '2.5rem',
-              fontWeight: 900,
-              fontFamily: 'Outfit, sans-serif',
-              color: 'var(--accent)',
-              textAlign: 'center',
-              background: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid var(--border-card)',
-              borderRadius: '8px',
-              padding: '2px',
-              outline: 'none'
+              fontSize: '2.4rem',
+              fontWeight: 800,
+              color: 'var(--accent-text)',
+              textAlign: 'center'
             }}
           />
 
-          {/* Editable Label */}
           <input
             type="text"
             value={stat.label}
             onChange={(e) => updateStat(idx, 'label', e.target.value)}
             placeholder="Label Metrik..."
             style={{
-              fontSize: '1rem',
+              fontSize: '0.95rem',
               fontWeight: 700,
-              color: 'var(--text-primary)',
-              textAlign: 'center',
-              background: 'rgba(255, 255, 255, 0.02)',
-              border: '1px solid var(--border-card)',
-              borderRadius: '6px',
-              padding: '4px',
-              outline: 'none'
+              textAlign: 'center'
             }}
           />
 
-          {/* Editable Description */}
           <textarea
             value={stat.description}
             onChange={(e) => updateStat(idx, 'description', e.target.value)}
@@ -696,11 +619,6 @@ const EditableStatsLayout: React.FC<{
               fontSize: '0.8rem',
               color: 'var(--text-secondary)',
               textAlign: 'center',
-              background: 'transparent',
-              border: '1px solid var(--border-card)',
-              borderRadius: '6px',
-              padding: '4px',
-              outline: 'none',
               resize: 'none'
             }}
           />
@@ -710,7 +628,7 @@ const EditableStatsLayout: React.FC<{
   );
 };
 
-// 4. Editable Timeline Layout
+// 4. Timeline
 const EditableTimelineLayout: React.FC<{
   content: TimelineContent;
   onContentChange: (newContent: TimelineContent) => void;
@@ -728,7 +646,7 @@ const EditableTimelineLayout: React.FC<{
       style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${steps.length}, 1fr)`,
-        gap: '1rem',
+        gap: '0.85rem',
         width: '100%'
       }}
     >
@@ -736,55 +654,46 @@ const EditableTimelineLayout: React.FC<{
         <div
           key={idx}
           style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px dashed var(--border-card)',
-            borderRadius: '12px',
+            backgroundColor: 'var(--bg-surface-elevated)',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: '6px',
             padding: '1rem',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '8px'
+            gap: '6px'
           }}
         >
-          {/* Step Number */}
           <input
             type="text"
+            className="font-mono"
             value={item.step}
             onChange={(e) => updateStep(idx, 'step', e.target.value)}
             style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: 'var(--accent)',
-              color: '#050810',
+              width: '36px',
+              height: '28px',
+              borderRadius: '4px',
+              backgroundColor: 'var(--accent-surface)',
+              color: 'var(--accent-text)',
               textAlign: 'center',
               fontWeight: 800,
-              border: 'none',
-              outline: 'none'
+              fontSize: '0.85rem'
             }}
           />
 
-          {/* Title */}
           <input
             type="text"
             value={item.title}
             onChange={(e) => updateStep(idx, 'title', e.target.value)}
-            placeholder="Nama Tahap..."
+            placeholder="Tahap..."
             style={{
               width: '100%',
-              fontSize: '0.9rem',
+              fontSize: '0.95rem',
               fontWeight: 700,
-              textAlign: 'center',
-              color: 'var(--text-primary)',
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid var(--border-card)',
-              borderRadius: '6px',
-              padding: '4px',
-              outline: 'none'
+              textAlign: 'center'
             }}
           />
 
-          {/* Description */}
           <textarea
             value={item.description}
             onChange={(e) => updateStep(idx, 'description', e.target.value)}
@@ -792,14 +701,9 @@ const EditableTimelineLayout: React.FC<{
             placeholder="Deskripsi langkah..."
             style={{
               width: '100%',
-              fontSize: '0.78rem',
+              fontSize: '0.8rem',
               color: 'var(--text-secondary)',
               textAlign: 'center',
-              background: 'transparent',
-              border: '1px solid var(--border-card)',
-              borderRadius: '6px',
-              padding: '4px',
-              outline: 'none',
               resize: 'none'
             }}
           />
@@ -809,7 +713,7 @@ const EditableTimelineLayout: React.FC<{
   );
 };
 
-// 5. Editable Callout Layout
+// 5. Callout
 const EditableCalloutLayout: React.FC<{
   content: CalloutContent;
   onContentChange: (newContent: CalloutContent) => void;
@@ -817,73 +721,57 @@ const EditableCalloutLayout: React.FC<{
   return (
     <div
       style={{
-        background: 'rgba(255, 255, 255, 0.03)',
-        border: '1px dashed var(--border-card)',
-        borderLeft: '5px solid var(--accent)',
-        borderRadius: '16px',
+        backgroundColor: 'var(--bg-surface-elevated)',
+        border: '1px solid var(--border-subtle)',
+        borderLeft: '4px solid var(--accent)',
+        borderRadius: '6px',
         padding: '2rem',
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px'
+        gap: '10px'
       }}
     >
-      {/* Badge */}
       <input
         type="text"
         value={content.highlightBadge || 'KESIMPULAN UTAMA'}
         onChange={(e) => onContentChange({ ...content, highlightBadge: e.target.value })}
         style={{
           width: 'fit-content',
-          padding: '4px 10px',
-          borderRadius: '6px',
-          background: 'var(--badge-bg)',
-          color: 'var(--badge-text)',
-          fontSize: '0.75rem',
-          fontWeight: 800,
-          border: '1px solid var(--accent)',
-          outline: 'none'
+          padding: '4px 8px',
+          fontSize: '0.72rem',
+          fontWeight: 700,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em'
         }}
       />
 
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-        <Quote size={32} style={{ color: 'var(--accent)', flexShrink: 0, opacity: 0.8 }} />
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {/* Quote text */}
+        <Quote size={28} style={{ color: 'var(--accent)', flexShrink: 0, opacity: 0.9 }} />
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <textarea
             value={content.quoteText}
             onChange={(e) => onContentChange({ ...content, quoteText: e.target.value })}
             rows={3}
-            placeholder="Kutipan atau tesis utama..."
+            placeholder="Tesis utama..."
             style={{
               width: '100%',
-              fontSize: '1.4rem',
+              fontSize: '1.35rem',
               fontWeight: 700,
               fontStyle: 'italic',
               color: 'var(--text-primary)',
-              background: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid var(--border-card)',
-              borderRadius: '8px',
-              padding: '8px',
-              outline: 'none',
               resize: 'none'
             }}
           />
 
-          {/* Explanation */}
           <textarea
             value={content.explanation}
             onChange={(e) => onContentChange({ ...content, explanation: e.target.value })}
             rows={2}
-            placeholder="Penjelasan konteks atau implikasi..."
+            placeholder="Penjelasan implikasi..."
             style={{
               width: '100%',
-              fontSize: '1rem',
+              fontSize: '0.95rem',
               color: 'var(--text-secondary)',
-              background: 'transparent',
-              border: '1px solid var(--border-card)',
-              borderRadius: '6px',
-              padding: '6px',
-              outline: 'none',
               resize: 'none'
             }}
           />

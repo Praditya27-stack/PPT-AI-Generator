@@ -407,19 +407,19 @@ export function App() {
             onClick={handlePrev}
             disabled={currentSlideIndex === 0}
             className="btn-secondary"
-            title="Slide Sebelumnya (Arrow Left)"
+            title="Slide Sebelumnya (Panah Kiri)"
             style={{
-              width: '48px',
-              height: '48px',
+              width: '40px',
+              height: '40px',
               padding: 0,
-              borderRadius: '50%',
+              borderRadius: '6px',
               justifyContent: 'center',
               opacity: currentSlideIndex === 0 ? 0.3 : 1,
               cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
               flexShrink: 0
             }}
           >
-            <ChevronLeft size={22} />
+            <ChevronLeft size={20} />
           </button>
 
           {/* Active Slide Stage: Editor vs Viewer */}
@@ -439,27 +439,25 @@ export function App() {
                 onDoneEditing={() => setIsEditingMode(false)}
               />
             ) : (
-              <div style={{ position: 'relative', width: '100%', maxWidth: '1100px' }}>
+              <div style={{ position: 'relative', width: '100%', maxWidth: '1050px' }}>
                 <SlideViewer slide={currentSlide} deckTitle={deck.title} />
                 
-                {/* Quick Edit Overlay Button */}
+                {/* Quick Edit Button */}
                 <button
                   type="button"
                   onClick={() => setIsEditingMode(true)}
                   className="btn-secondary"
                   style={{
                     position: 'absolute',
-                    top: '16px',
-                    right: '16px',
-                    padding: '6px 12px',
-                    fontSize: '0.8rem',
-                    background: 'rgba(15, 23, 42, 0.85)',
-                    backdropFilter: 'blur(8px)',
-                    borderColor: 'var(--accent)'
+                    top: '12px',
+                    right: '12px',
+                    padding: '5px 10px',
+                    fontSize: '0.75rem',
+                    backgroundColor: 'var(--bg-surface-elevated)'
                   }}
-                  title="Buka alat kustomisasi & AI Co-pilot untuk slide ini"
+                  title="Kustomisasi teks dan layout slide ini"
                 >
-                  <Edit3 size={14} style={{ color: 'var(--accent)' }} />
+                  <Edit3 size={13} />
                   <span>Kustomisasi Slide</span>
                 </button>
               </div>
@@ -471,24 +469,24 @@ export function App() {
             onClick={handleNext}
             disabled={currentSlideIndex === deck.slides.length - 1}
             className="btn-secondary"
-            title="Slide Selanjutnya (Arrow Right / Space)"
+            title="Slide Selanjutnya (Panah Kanan / Space)"
             style={{
-              width: '48px',
-              height: '48px',
+              width: '40px',
+              height: '40px',
               padding: 0,
-              borderRadius: '50%',
+              borderRadius: '6px',
               justifyContent: 'center',
               opacity: currentSlideIndex === deck.slides.length - 1 ? 0.3 : 1,
               cursor: currentSlideIndex === deck.slides.length - 1 ? 'not-allowed' : 'pointer',
               flexShrink: 0
             }}
           >
-            <ChevronRight size={22} />
+            <ChevronRight size={20} />
           </button>
         </div>
 
         {/* Thumbnail Navigation Strip */}
-        <div style={{ width: '100%', maxWidth: '900px', marginTop: '1.5rem' }}>
+        <div style={{ width: '100%', maxWidth: '900px', marginTop: '1.25rem' }}>
           <ThumbnailStrip
             slides={deck.slides}
             currentIndex={currentSlideIndex}
@@ -501,13 +499,13 @@ export function App() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '16px',
-            marginTop: '0.75rem',
+            gap: '12px',
+            marginTop: '0.5rem',
             color: 'var(--text-muted)',
-            fontSize: '0.85rem'
+            fontSize: '0.8rem'
           }}
         >
-          <span>Gunakan tombol panah ⬅️ ➡️ keyboard untuk navigasi</span>
+          <span>Navigasi: Panah Kiri / Kanan atau Spasi</span>
           <span>•</span>
           <button
             onClick={() => {
@@ -524,10 +522,11 @@ export function App() {
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px'
+              gap: '4px',
+              fontSize: '0.8rem'
             }}
           >
-            <Maximize2 size={13} /> Fullscreen
+            <Maximize2 size={13} /> Layar Penuh
           </button>
         </div>
       </main>
