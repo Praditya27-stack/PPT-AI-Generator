@@ -74,6 +74,14 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
     onUpdateSlide({ ...slide, subtitle: newSubtitle });
   };
 
+  const handleEyebrowChange = (newEyebrow: string) => {
+    onUpdateSlide({ ...slide, eyebrow: newEyebrow });
+  };
+
+  const handleSpeakerNotesChange = (newNotes: string) => {
+    onUpdateSlide({ ...slide, speakerNotes: newNotes });
+  };
+
   const handleContentChange = (newContent: Slide['content']) => {
     onUpdateSlide({ ...slide, content: newContent });
   };
@@ -233,22 +241,27 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
         {slide.layout !== 'hero' && (
           <div style={{ marginBottom: '1.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <span
+              <input
+                type="text"
+                value={slide.eyebrow || ''}
+                onChange={(e) => handleEyebrowChange(e.target.value)}
+                placeholder={slide.layout.toUpperCase()}
+                title="Klik untuk mengubah Eyebrow / Kategori slide"
                 style={{
                   fontSize: '0.72rem',
                   fontWeight: 700,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.06em',
+                  letterSpacing: '0.08em',
                   padding: '3px 8px',
                   borderRadius: '4px',
                   backgroundColor: 'var(--accent-surface)',
                   color: 'var(--accent-text)',
-                  border: '1px solid var(--border-subtle)'
+                  border: '1px solid var(--border-subtle)',
+                  width: 'fit-content',
+                  maxWidth: '300px'
                 }}
-              >
-                {slide.layout}
-              </span>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              />
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                 Slide {slide.slideNumber}
               </span>
             </div>
@@ -280,6 +293,17 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
                 color: 'var(--text-secondary)'
               }}
             />
+
+            {/* Gamma Signature Accent Divider */}
+            <div
+              style={{
+                width: '40px',
+                height: '3px',
+                backgroundColor: 'var(--accent)',
+                borderRadius: '2px',
+                marginTop: '10px'
+              }}
+            />
           </div>
         )}
 
@@ -289,6 +313,8 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
             <EditableHeroLayout
               content={slide.content as HeroContent}
               title={slide.title}
+              eyebrow={slide.eyebrow}
+              onEyebrowChange={handleEyebrowChange}
               onTitleChange={handleTitleChange}
               onContentChange={handleContentChange}
             />
@@ -319,6 +345,49 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
           )}
         </div>
 
+        {/* Speaker Notes Editor (Gamma-style) */}
+        <div
+          style={{
+            marginTop: '1.25rem',
+            marginBottom: '0.75rem',
+            padding: '0.65rem 0.95rem',
+            borderRadius: '6px',
+            backgroundColor: 'var(--surface-sunken)',
+            borderLeft: '3px solid var(--accent)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px'
+          }}
+        >
+          <label
+            style={{
+              fontWeight: 700,
+              fontSize: '0.7rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              color: 'var(--accent-text)'
+            }}
+          >
+            Catatan Presenter (Speaker Notes):
+          </label>
+          <textarea
+            value={slide.speakerNotes || ''}
+            onChange={(e) => handleSpeakerNotesChange(e.target.value)}
+            placeholder="Tuliskan catatan atau panduan berbicara saat membawakan slide ini..."
+            rows={2}
+            style={{
+              width: '100%',
+              fontSize: '0.82rem',
+              color: 'var(--text-secondary)',
+              backgroundColor: 'transparent',
+              border: 'none',
+              resize: 'vertical',
+              outline: 'none',
+              lineHeight: 1.45
+            }}
+          />
+        </div>
+
         {/* Footer */}
         <div
           style={{
@@ -344,22 +413,33 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
 const EditableHeroLayout: React.FC<{
   content: HeroContent;
   title: string;
+  eyebrow?: string;
+  onEyebrowChange: (val: string) => void;
   onTitleChange: (val: string) => void;
   onContentChange: (newContent: HeroContent) => void;
-}> = ({ content, title, onTitleChange, onContentChange }) => {
+}> = ({ content, title, eyebrow, onEyebrowChange, onTitleChange, onContentChange }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', padding: '0.5rem 0' }}>
       <input
         type="text"
-        value={content.badge || 'STRATEGIC BRIEFING'}
-        onChange={(e) => onContentChange({ ...content, badge: e.target.value })}
+        value={eyebrow || content.badge || 'STRATEGIC BRIEFING'}
+        onChange={(e) => {
+          onEyebrowChange(e.target.value);
+          onContentChange({ ...content, badge: e.target.value });
+        }}
+        placeholder="EYEBROW / KATEGORI HERO..."
+        title="Klik untuk mengubah Eyebrow / Kategori Hero"
         style={{
           width: 'fit-content',
           padding: '4px 10px',
-          fontSize: '0.75rem',
+          fontSize: '0.74rem',
           fontWeight: 700,
           textTransform: 'uppercase',
-          letterSpacing: '0.06em'
+          letterSpacing: '0.08em',
+          backgroundColor: 'var(--accent-surface)',
+          color: 'var(--accent-text)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: '4px'
         }}
       />
 
@@ -377,6 +457,17 @@ const EditableHeroLayout: React.FC<{
           fontWeight: 900,
           color: 'var(--text-primary)',
           resize: 'none'
+        }}
+      />
+
+      {/* Gamma Signature Accent Divider */}
+      <div
+        style={{
+          width: '56px',
+          height: '3.5px',
+          backgroundColor: 'var(--accent)',
+          borderRadius: '2px',
+          margin: '2px 0 6px'
         }}
       />
 

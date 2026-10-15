@@ -38,12 +38,16 @@ Your mission is to produce high-impact, professional, visual slide deck specific
      * GOOD: "Arsitektur Zero-Trust Mencegah 94% Infiltrasi Lateral"
    - Body & Card Descriptions: Punchy and concise (strictly maximum 15 words per card).
 
-5. BALANCED LAYOUT VARIETY:
+5. GAMMA-STYLE VISUAL ARCHITECTURE (EYEBROW & PRESENTER NOTES):
+   - Every slide MUST include an 'eyebrow': an uppercase category / step tracker with letter-spacing (e.g. "01 — LATAR BELAKANG", "02 — METRIK KUNCI", "STRATEGI · FASE 1", "KESIMPULAN & LANGKAH").
+   - Every slide MUST include 'speakerNotes': concrete presenter speaking points or cues (e.g. "Buka dengan menanyakan audiens apakah pernah merasakan hal serupa...").
+
+6. BALANCED LAYOUT VARIETY:
    - Slide 1: Always 'hero' layout.
    - Middle slides: Alternate across 'cards', 'stats', 'timeline'.
    - Final slide: 'callout' or 'cards' delivering actionable next steps or core thesis.
 
-6. STRICT JSON ONLY:
+7. STRICT JSON ONLY:
    - Output MUST be 100% valid JSON matching the exact schema.
    - Do NOT wrap with markdown backticks (no \`\`\`json). Return raw JSON starting with { and ending with }.
 
@@ -57,8 +61,10 @@ Your mission is to produce high-impact, professional, visual slide deck specific
       "id": "slide-1",
       "slideNumber": 1,
       "layout": "hero",
+      "eyebrow": "PRESENTASI · STRATEGI EKSEKUTIF",
       "title": "Main Action Title",
       "subtitle": "Clear supporting value proposition",
+      "speakerNotes": "Sambut audiens dan jelaskan tujuan utama presentasi dalam 30 detik pertama.",
       "content": {
         "headline": "Massive Hero Headline (7-10 words)",
         "subheadline": "Contextual subtitle explanation (1-2 sentences)",
@@ -70,8 +76,10 @@ Your mission is to produce high-impact, professional, visual slide deck specific
       "id": "slide-2",
       "slideNumber": 2,
       "layout": "cards",
+      "eyebrow": "01 — PILAR STRATEGIS",
       "title": "Three Strategic Pillars",
       "subtitle": "Core execution drivers for scalable growth",
+      "speakerNotes": "Tekankan pilar pertama sebagai pondasi sebelum membahas dua pilar berikutnya.",
       "content": {
         "cards": [
           { "title": "Automated Workflows", "description": "Eliminates 12+ weekly hours of manual operational overhead", "iconName": "zap" },
@@ -84,8 +92,10 @@ Your mission is to produce high-impact, professional, visual slide deck specific
       "id": "slide-3",
       "slideNumber": 3,
       "layout": "stats",
+      "eyebrow": "02 — DAMPAK TERUKUR",
       "title": "Proven Performance Metrics",
       "subtitle": "Quantifiable operational impact",
+      "speakerNotes": "Soroti angka 4.2x speed multiplier sebagai diferensiator utama dari kompetitor.",
       "content": {
         "stats": [
           { "value": "4.2x", "label": "Speed Multiplier", "description": "Faster delivery across deployment pipelines" },
@@ -98,8 +108,10 @@ Your mission is to produce high-impact, professional, visual slide deck specific
       "id": "slide-4",
       "slideNumber": 4,
       "layout": "timeline",
+      "eyebrow": "03 — ROADMAP IMPLEMENTASI",
       "title": "Phased Implementation Roadmap",
       "subtitle": "Milestones towards production maturity",
+      "speakerNotes": "Jelaskan bahwa fase audit hanya memakan waktu 2 minggu pertama sebelum pilot dimulai.",
       "content": {
         "steps": [
           { "step": "01", "title": "Discovery & Audit", "description": "Evaluate legacy bottlenecks and baseline metrics" },
@@ -112,8 +124,10 @@ Your mission is to produce high-impact, professional, visual slide deck specific
       "id": "slide-5",
       "slideNumber": 5,
       "layout": "callout",
+      "eyebrow": "KESIMPULAN · LANGKAH STRATEGIS",
       "title": "The Strategic Imperative",
       "subtitle": "Key takeaway for leadership",
+      "speakerNotes": "Tutup dengan call to action yang jelas dan buka sesi tanya jawab.",
       "content": {
         "quoteText": "Organizations that operationalize AI workflows today capture an asymmetric compounding advantage.",
         "highlightBadge": "CORE THESIS",
@@ -234,8 +248,10 @@ Return ONLY a single valid JSON object for this Slide matching the SlideSchema:
   "id": "${slide.id}",
   "slideNumber": ${slide.slideNumber},
   "layout": "${layout}",
+  "eyebrow": "${slide.eyebrow || '01 — FOKUS UTAMA'}",
   "title": "Action Headline",
   "subtitle": "Supporting subtitle",
+  "speakerNotes": "Actionable presenter speaking points",
   "content": { ... matching layout "${layout}" ... }
 }`;
 

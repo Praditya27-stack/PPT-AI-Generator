@@ -54,6 +54,11 @@ export async function exportToPPTX(deck: PresentationDeck): Promise<Buffer> {
         break;
     }
 
+    // Embed Native Speaker Notes (Gamma-style)
+    if (slideData.speakerNotes) {
+      slide.addNotes(slideData.speakerNotes);
+    }
+
     // Footer indicator (Slide Number & Deck Title)
     renderFooter(slide, slideData, deck.title, theme);
   }
@@ -67,23 +72,27 @@ export async function exportToPPTX(deck: PresentationDeck): Promise<Buffer> {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function renderStandardHeader(slide: any, slideData: Slide, theme: ThemePalette, pptx: any) {
-  // Category Pill / Layout Indicator
+  // Category Pill / Eyebrow (Gamma Signature)
+  const rawEyebrow = slideData.eyebrow || slideData.layout;
+  const eyebrowText = rawEyebrow.toUpperCase();
+  const pillWidth = Math.max(1.6, Math.min(CONTENT_WIDTH, eyebrowText.length * 0.09 + 0.35));
+
   slide.addShape(pptx.ShapeType.roundRect, {
     x: MARGIN_LEFT,
-    y: 0.5,
-    w: 1.6,
-    h: 0.32,
-    rectRadius: 0.1,
+    y: 0.42,
+    w: pillWidth,
+    h: 0.28,
+    rectRadius: 0.08,
     fill: { color: theme.badgeBg },
-    line: { color: theme.accent, width: 0.5 }
+    line: { color: theme.accent, width: 0.6 }
   });
 
-  slide.addText(slideData.layout.toUpperCase(), {
+  slide.addText(eyebrowText, {
     x: MARGIN_LEFT,
-    y: 0.5,
-    w: 1.6,
-    h: 0.32,
-    fontSize: 9,
+    y: 0.42,
+    w: pillWidth,
+    h: 0.28,
+    fontSize: 8.5,
     fontFace: 'Arial',
     bold: true,
     color: theme.badgeText,
@@ -94,9 +103,9 @@ function renderStandardHeader(slide: any, slideData: Slide, theme: ThemePalette,
   // Action Title
   slide.addText(slideData.title, {
     x: MARGIN_LEFT,
-    y: 0.9,
+    y: 0.78,
     w: CONTENT_WIDTH,
-    h: 0.55,
+    h: 0.52,
     fontSize: 22,
     fontFace: 'Arial',
     bold: true,
@@ -105,18 +114,30 @@ function renderStandardHeader(slide: any, slideData: Slide, theme: ThemePalette,
   });
 
   // Subtitle
+  let nextY = 1.34;
   if (slideData.subtitle) {
     slide.addText(slideData.subtitle, {
       x: MARGIN_LEFT,
-      y: 1.45,
+      y: 1.34,
       w: CONTENT_WIDTH,
-      h: 0.35,
-      fontSize: 13,
+      h: 0.32,
+      fontSize: 12.5,
       fontFace: 'Arial',
       color: theme.textSecondary,
       valign: 'top'
     });
+    nextY = 1.70;
   }
+
+  // Gamma Signature Accent Bar (<hr color="accent">)
+  slide.addShape(pptx.ShapeType.rect, {
+    x: MARGIN_LEFT,
+    y: nextY,
+    w: 0.7,
+    h: 0.035,
+    fill: { color: theme.accent },
+    line: { color: theme.accent, width: 0 }
+  });
 }
 
 /**
@@ -137,24 +158,27 @@ function renderHeroLayout(slide: any, slideData: Slide, theme: ThemePalette, ppt
     line: { color: theme.cardBorder, width: 1.5 }
   });
 
-  // Category Badge
-  const badgeText = content.badge || 'EXECUTIVE BRIEFING';
+  // Category Badge / Eyebrow
+  const rawBadge = slideData.eyebrow || content.badge || 'EXECUTIVE BRIEFING';
+  const badgeText = rawBadge.toUpperCase();
+  const badgeWidth = Math.max(2.2, Math.min(6.0, badgeText.length * 0.09 + 0.4));
+
   slide.addShape(pptx.ShapeType.roundRect, {
     x: 1.4,
-    y: 1.2,
-    w: 2.2,
-    h: 0.35,
-    rectRadius: 0.1,
+    y: 1.15,
+    w: badgeWidth,
+    h: 0.32,
+    rectRadius: 0.08,
     fill: { color: theme.badgeBg },
-    line: { color: theme.accent, width: 1 }
+    line: { color: theme.accent, width: 0.8 }
   });
 
-  slide.addText(badgeText.toUpperCase(), {
+  slide.addText(badgeText, {
     x: 1.4,
-    y: 1.2,
-    w: 2.2,
-    h: 0.35,
-    fontSize: 10,
+    y: 1.15,
+    w: badgeWidth,
+    h: 0.32,
+    fontSize: 9,
     fontFace: 'Arial',
     bold: true,
     color: theme.badgeText,
@@ -165,23 +189,33 @@ function renderHeroLayout(slide: any, slideData: Slide, theme: ThemePalette, ppt
   // Headline
   slide.addText(content.headline || slideData.title, {
     x: 1.4,
-    y: 1.7,
+    y: 1.6,
     w: 7.2,
-    h: 1.4,
-    fontSize: 32,
+    h: 1.3,
+    fontSize: 30,
     fontFace: 'Arial',
     bold: true,
     color: theme.textPrimary,
     valign: 'top'
   });
 
+  // Gamma Signature Accent Bar in Hero
+  slide.addShape(pptx.ShapeType.rect, {
+    x: 1.4,
+    y: 2.95,
+    w: 0.85,
+    h: 0.04,
+    fill: { color: theme.accent },
+    line: { color: theme.accent, width: 0 }
+  });
+
   // Subheadline
   slide.addText(content.subheadline || slideData.subtitle || '', {
     x: 1.4,
-    y: 3.1,
+    y: 3.12,
     w: 7.2,
-    h: 0.8,
-    fontSize: 16,
+    h: 0.7,
+    fontSize: 15,
     fontFace: 'Arial',
     color: theme.textSecondary,
     valign: 'top'

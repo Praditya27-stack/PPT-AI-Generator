@@ -42,24 +42,24 @@ export const SlideViewer: React.FC<SlideViewerProps> = ({ slide, deckTitle }) =>
     <div className="slide-stage-container" key={slide.id}>
       {/* Slide Header (for non-hero slides) */}
       {slide.layout !== 'hero' && (
-        <div style={{ marginBottom: '2.25rem' }}>
+        <div style={{ marginBottom: '1.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <span
               style={{
                 fontSize: '0.72rem',
                 fontWeight: 700,
                 textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                padding: '3px 8px',
+                letterSpacing: '0.08em',
+                padding: '3px 9px',
                 borderRadius: '4px',
                 backgroundColor: 'var(--accent-surface)',
                 color: 'var(--accent-text)',
                 border: '1px solid var(--border-subtle)'
               }}
             >
-              {slide.layout}
+              {slide.eyebrow || slide.layout}
             </span>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
               Slide {slide.slideNumber}
             </span>
           </div>
@@ -77,27 +77,71 @@ export const SlideViewer: React.FC<SlideViewerProps> = ({ slide, deckTitle }) =>
           </h2>
 
           {slide.subtitle && (
-            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', maxWidth: '90%' }}>
+            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', maxWidth: '90%', marginBottom: '8px' }}>
               {slide.subtitle}
             </p>
           )}
+
+          {/* Gamma Signature Accent Divider */}
+          <div
+            style={{
+              width: '40px',
+              height: '3px',
+              backgroundColor: 'var(--accent)',
+              borderRadius: '2px',
+              marginTop: '8px'
+            }}
+          />
         </div>
       )}
 
       {/* Slide Body */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        {slide.layout === 'hero' && <HeroLayout content={slide.content as HeroContent} title={slide.title} />}
+        {slide.layout === 'hero' && <HeroLayout content={slide.content as HeroContent} title={slide.title} eyebrow={slide.eyebrow} />}
         {slide.layout === 'cards' && <CardsLayout content={slide.content as CardsContent} />}
         {slide.layout === 'stats' && <StatsLayout content={slide.content as StatsContent} />}
         {slide.layout === 'timeline' && <TimelineLayout content={slide.content as TimelineContent} />}
         {slide.layout === 'callout' && <CalloutLayout content={slide.content as CalloutContent} />}
       </div>
 
+      {/* Speaker Notes Drawer (Gamma-style) */}
+      {slide.speakerNotes && (
+        <div
+          style={{
+            marginTop: '1.25rem',
+            marginBottom: '0.5rem',
+            padding: '0.65rem 0.95rem',
+            borderRadius: '6px',
+            backgroundColor: 'var(--surface-sunken)',
+            borderLeft: '3px solid var(--accent)',
+            fontSize: '0.82rem',
+            color: 'var(--text-secondary)',
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '8px'
+          }}
+        >
+          <span
+            style={{
+              fontWeight: 700,
+              fontSize: '0.7rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              color: 'var(--accent-text)',
+              flexShrink: 0
+            }}
+          >
+            Presenter Cue:
+          </span>
+          <span style={{ lineHeight: 1.45 }}>{slide.speakerNotes}</span>
+        </div>
+      )}
+
       {/* Slide Footer */}
       <div
         style={{
           marginTop: 'auto',
-          paddingTop: '1.25rem',
+          paddingTop: '1rem',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -114,10 +158,11 @@ export const SlideViewer: React.FC<SlideViewerProps> = ({ slide, deckTitle }) =>
 };
 
 // 1. Hero Layout
-const HeroLayout: React.FC<{ content: HeroContent; title: string }> = ({ content, title }) => {
+const HeroLayout: React.FC<{ content: HeroContent; title: string; eyebrow?: string }> = ({ content, title, eyebrow }) => {
+  const badgeText = eyebrow || content.badge;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', padding: '1rem 0' }}>
-      {content.badge && (
+      {badgeText && (
         <div
           style={{
             display: 'inline-flex',
@@ -125,15 +170,16 @@ const HeroLayout: React.FC<{ content: HeroContent; title: string }> = ({ content
             borderRadius: '4px',
             backgroundColor: 'var(--accent-surface)',
             color: 'var(--accent-text)',
-            fontSize: '0.75rem',
+            fontSize: '0.74rem',
             fontWeight: 700,
-            letterSpacing: '0.06em',
+            letterSpacing: '0.08em',
             textTransform: 'uppercase',
             marginBottom: '1.25rem',
-            width: 'fit-content'
+            width: 'fit-content',
+            border: '1px solid var(--border-subtle)'
           }}
         >
-          {content.badge}
+          {badgeText}
         </div>
       )}
 
@@ -143,16 +189,27 @@ const HeroLayout: React.FC<{ content: HeroContent; title: string }> = ({ content
           fontWeight: 900,
           color: 'var(--text-primary)',
           lineHeight: 1.18,
-          marginBottom: '1.25rem',
+          marginBottom: '0.75rem',
           maxWidth: '92%'
         }}
       >
         {content.headline || title}
       </h1>
 
+      {/* Gamma Signature Accent Divider */}
+      <div
+        style={{
+          width: '56px',
+          height: '3.5px',
+          backgroundColor: 'var(--accent)',
+          borderRadius: '2px',
+          marginBottom: '1.25rem'
+        }}
+      />
+
       <p
         style={{
-          fontSize: '1.25rem',
+          fontSize: '1.2rem',
           color: 'var(--text-secondary)',
           lineHeight: 1.55,
           maxWidth: '85%',

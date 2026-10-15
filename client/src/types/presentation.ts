@@ -48,8 +48,10 @@ export interface Slide {
   id: string;
   slideNumber: number;
   layout: 'hero' | 'cards' | 'stats' | 'timeline' | 'callout';
+  eyebrow?: string;
   title: string;
   subtitle?: string;
+  speakerNotes?: string;
   content: HeroContent | CardsContent | StatsContent | TimelineContent | CalloutContent;
 }
 

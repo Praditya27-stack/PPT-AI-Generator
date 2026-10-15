@@ -64,8 +64,10 @@ export const SlideSchema = z.object({
   id: z.string().describe('Unique slide ID, e.g. "slide-1"'),
   slideNumber: z.number().int().positive(),
   layout: z.enum(['hero', 'cards', 'stats', 'timeline', 'callout']),
+  eyebrow: z.string().optional().describe('Gamma-style uppercase section/category indicator (e.g. "01 — DEFINISI", "PENDAHULUAN · KESEHATAN MENTAL")'),
   title: z.string().describe('Action-oriented slide headline'),
   subtitle: z.string().optional().describe('Supporting subtext or context'),
+  speakerNotes: z.string().optional().describe('Actionable presenter notes or speaking cues for this slide'),
   content: z.union([
     HeroContentSchema,
     CardsContentSchema,
