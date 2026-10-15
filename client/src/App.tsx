@@ -23,8 +23,10 @@ const INITIAL_DECK: PresentationDeck = {
       id: 'slide-1',
       slideNumber: 1,
       layout: 'hero',
+      eyebrow: 'PRESENTASI · STRATEGI EKSEKUTIF 2026',
       title: 'AI Mendorong Nilai Tambah Ekonomi Nasional 2026',
       subtitle: 'Transformasi dari eksperimen parsial menuju integrasi ekosistem AI enterprise berskala penuh.',
+      speakerNotes: 'Sambut audiens, perkenalkan agenda transformasi enterprise AI, dan soroti fokus pada efisiensi biaya nyata.',
       content: {
         headline: 'Akselerasi Pertumbuhan Eksponensial Lewat Automasi Kognitif',
         subheadline: 'Mengubah struktur biaya operasional dan mempercepat time-to-market secara fundamental.',
@@ -36,8 +38,10 @@ const INITIAL_DECK: PresentationDeck = {
       id: 'slide-2',
       slideNumber: 2,
       layout: 'cards',
+      eyebrow: '01 — PILAR ARSITEKTUR',
       title: 'Tiga Pilar Utama Integrasi AI Terarah',
       subtitle: 'Fondasi arsitektural untuk memastikan return on investment yang nyata',
+      speakerNotes: 'Jelaskan mengapa ketiga pilar ini harus diimplementasikan bersamaan untuk mencegah kebocoran data dan pembengkakan biaya.',
       content: {
         cards: [
           {
@@ -62,8 +66,10 @@ const INITIAL_DECK: PresentationDeck = {
       id: 'slide-3',
       slideNumber: 3,
       layout: 'stats',
+      eyebrow: '02 — DAMPAK TERUKUR',
       title: 'Metrik Efisiensi & Dampak Finansial Terukur',
       subtitle: 'Kompilasi tolok ukur implementasi arsitektur AI modern',
+      speakerNotes: 'Arahkan perhatian audiens ke metrik 4.8x akselerasi dan kepatuhan memori <120MB yang membuktikan efisiensi ekstrem.',
       content: {
         stats: [
           {
@@ -88,8 +94,10 @@ const INITIAL_DECK: PresentationDeck = {
       id: 'slide-4',
       slideNumber: 4,
       layout: 'timeline',
+      eyebrow: '03 — ROADMAP IMPLEMENTASI',
       title: 'Roadmap Eksekusi Multi-Tahap Menuju Skalabilitas',
       subtitle: 'Tahapan sistematis migrasi proses konvensional ke platform AI',
+      speakerNotes: 'Tekankan bahwa fase audit dan pilot hanya membutuhkan 4 minggu pertama sebelum cutover penuh.',
       content: {
         steps: [
           { step: '01', title: 'Audit & Arsitektur', description: 'Identifikasi bottleneck dan kalkulasi kapasitas RAM/GPU.' },
@@ -102,8 +110,10 @@ const INITIAL_DECK: PresentationDeck = {
       id: 'slide-5',
       slideNumber: 5,
       layout: 'callout',
+      eyebrow: 'KESIMPULAN · LANGKAH STRATEGIS',
       title: 'Urgensi Kepemimpinan di Lanskap AI 2026',
       subtitle: 'Konklusi strategis bagi para pembuat keputusan',
+      speakerNotes: 'Tutup dengan ajakan bertindak jelas untuk memulai asesmen infrastruktur awal minggu ini.',
       content: {
         quoteText: 'Organisasi yang membangun arsitektur data adaptif hari ini akan menguasai margin pasar besok.',
         highlightBadge: 'KESIMPULAN EKSEKUTIF',
