@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { PresentationTheme } from '../types/presentation';
-import { Layers, Sliders, Globe, X, ArrowRight } from 'lucide-react';
+import { Layers, Palette, Globe, X, ArrowRight, Sparkles } from 'lucide-react';
 
 interface PromptModalProps {
   isOpen: boolean;
@@ -40,7 +40,9 @@ export const PromptModal: React.FC<PromptModalProps> = ({
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backgroundColor: 'rgba(5, 7, 10, 0.75)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
         zIndex: 50,
         display: 'flex',
         alignItems: 'center',
@@ -49,13 +51,15 @@ export const PromptModal: React.FC<PromptModalProps> = ({
       }}
     >
       <div
-        className="studio-panel"
         style={{
           width: '100%',
-          maxWidth: '600px',
-          padding: '2rem',
+          maxWidth: '620px',
+          padding: '2.25rem',
           position: 'relative',
-          backgroundColor: 'var(--bg-surface)'
+          backgroundColor: 'var(--bg-surface)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: '16px',
+          boxShadow: '0 24px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08)'
         }}
       >
         {/* Close Button */}
@@ -69,17 +73,58 @@ export const PromptModal: React.FC<PromptModalProps> = ({
             background: 'none',
             border: 'none',
             color: 'var(--text-secondary)',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            padding: '4px'
           }}
         >
           <X size={18} />
         </button>
 
-        <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '4px' }}>
-          Buat Presentasi Baru
+        {/* Eyebrow & Header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '5px',
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              padding: '3px 8px',
+              borderRadius: '6px',
+              backgroundColor: 'var(--accent-surface)',
+              color: 'var(--accent-text)'
+            }}
+          >
+            <Sparkles size={11} />
+            AI Deck Generator
+          </span>
+        </div>
+
+        <h2
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: '1.6rem',
+            fontWeight: 800,
+            letterSpacing: '-0.03em',
+            color: 'var(--text-primary)',
+            marginBottom: '4px'
+          }}
+        >
+          Buat Presentasi dengan AI
         </h2>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-          Ditenagai oleh Gemini 3.8 Flash dengan aturan copywriting anti-slop (ringkas, padat, berbasis fakta).
+        <p
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: '0.88rem',
+            color: 'var(--text-secondary)',
+            lineHeight: 1.5,
+            marginBottom: '1.5rem'
+          }}
+        >
+          Didukung model Gemini 3.8 Flash High dengan arsitektur anti-slop: berbasis data empiris, ringkas, dan terstruktur.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -186,7 +231,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({
                   marginBottom: '5px'
                 }}
               >
-                <Sliders size={13} /> Tema Visual
+                <Palette size={13} /> Tema Visual
               </label>
               <select
                 value={theme}
@@ -194,10 +239,10 @@ export const PromptModal: React.FC<PromptModalProps> = ({
                 disabled={isLoading}
                 style={{ width: '100%', fontSize: '0.85rem' }}
               >
-                <option value="dark_modern">Dark Slate</option>
-                <option value="cyberpunk">Matte Emerald</option>
-                <option value="corporate_blue">Corporate Navy</option>
-                <option value="minimal_light">Studio Light</option>
+                <option value="dark_modern">Obsidian Violet</option>
+                <option value="cyberpunk">Cyber Emerald</option>
+                <option value="corporate_blue">Corporate Ocean</option>
+                <option value="minimal_light">Editorial Light</option>
               </select>
             </div>
 
@@ -242,13 +287,19 @@ export const PromptModal: React.FC<PromptModalProps> = ({
               type="submit"
               className="btn-primary"
               disabled={isLoading || !topic.trim()}
-              style={{ minWidth: '150px', justifyContent: 'center' }}
+              style={{
+                minWidth: '160px',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, var(--accent) 0%, #6366F1 100%)',
+                boxShadow: '0 4px 14px -2px rgba(139, 92, 246, 0.45)'
+              }}
             >
               {isLoading ? (
                 <span>Menghasilkan...</span>
               ) : (
                 <>
-                  <span>Mulai Generate</span>
+                  <Sparkles size={14} />
+                  <span>Generate Slide</span>
                   <ArrowRight size={14} />
                 </>
               )}

@@ -23,6 +23,7 @@ import {
 interface SlideViewerProps {
   slide: Slide;
   deckTitle: string;
+  showSpeakerNotes?: boolean;
 }
 
 const getSemanticIcon = (iconName?: string) => {
@@ -37,59 +38,74 @@ const getSemanticIcon = (iconName?: string) => {
   return <CheckCircle2 size={20} />;
 };
 
-export const SlideViewer: React.FC<SlideViewerProps> = ({ slide, deckTitle }) => {
+export const SlideViewer: React.FC<SlideViewerProps> = ({ slide, deckTitle, showSpeakerNotes = true }) => {
   return (
     <div className="slide-stage-container" key={slide.id}>
       {/* Slide Header (for non-hero slides) */}
       {slide.layout !== 'hero' && (
         <div style={{ marginBottom: '1.75rem' }}>
+          {/* Eyebrow Tracker */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
             <span
               style={{
-                fontSize: '0.72rem',
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: '0.74rem',
                 fontWeight: 700,
                 textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                padding: '3px 9px',
-                borderRadius: '4px',
+                letterSpacing: '0.12em',
+                padding: '4px 10px',
+                borderRadius: '6px',
                 backgroundColor: 'var(--accent-surface)',
                 color: 'var(--accent-text)',
-                border: '1px solid var(--border-subtle)'
+                border: '1px solid rgba(255, 255, 255, 0.08)'
               }}
             >
               {slide.eyebrow || slide.layout}
             </span>
             <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              Slide {slide.slideNumber}
+              Card {slide.slideNumber}
             </span>
           </div>
 
+          {/* Headline */}
           <h2
             style={{
-              fontSize: '2.1rem',
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '2.3rem',
               fontWeight: 800,
               color: 'var(--text-primary)',
-              lineHeight: 1.25,
+              lineHeight: 1.22,
+              letterSpacing: '-0.035em',
               marginBottom: '6px'
             }}
           >
             {slide.title}
           </h2>
 
+          {/* Subtitle */}
           {slide.subtitle && (
-            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', maxWidth: '90%', marginBottom: '8px' }}>
+            <p
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '1.05rem',
+                color: 'var(--text-secondary)',
+                lineHeight: 1.55,
+                maxWidth: '90%',
+                marginBottom: '8px'
+              }}
+            >
               {slide.subtitle}
             </p>
           )}
 
-          {/* Gamma Signature Accent Divider */}
+          {/* Gamma Signature Accent Divider (<hr color="accent">) */}
           <div
             style={{
-              width: '40px',
-              height: '3px',
+              width: '44px',
+              height: '3.5px',
               backgroundColor: 'var(--accent)',
-              borderRadius: '2px',
-              marginTop: '8px'
+              borderRadius: '9999px',
+              marginTop: '10px'
             }}
           />
         </div>
@@ -104,34 +120,38 @@ export const SlideViewer: React.FC<SlideViewerProps> = ({ slide, deckTitle }) =>
         {slide.layout === 'callout' && <CalloutLayout content={slide.content as CalloutContent} />}
       </div>
 
-      {/* Speaker Notes Drawer (Gamma-style) */}
-      {slide.speakerNotes && (
+      {/* Presenter Cue / Speaker Notes (Gamma-style) */}
+      {showSpeakerNotes && slide.speakerNotes && (
         <div
           style={{
             marginTop: '1.25rem',
             marginBottom: '0.5rem',
-            padding: '0.65rem 0.95rem',
-            borderRadius: '6px',
-            backgroundColor: 'var(--surface-sunken)',
+            padding: '0.75rem 1rem',
+            borderRadius: '10px',
+            backgroundColor: 'var(--bg-surface-sunken)',
             borderLeft: '3px solid var(--accent)',
             fontSize: '0.82rem',
             color: 'var(--text-secondary)',
             display: 'flex',
             alignItems: 'baseline',
-            gap: '8px'
+            gap: '8px',
+            border: '1px solid rgba(255, 255, 255, 0.05)',
+            borderLeftWidth: '3px',
+            borderLeftColor: 'var(--accent)'
           }}
         >
           <span
             style={{
+              fontFamily: "'Space Grotesk', sans-serif",
               fontWeight: 700,
-              fontSize: '0.7rem',
+              fontSize: '0.72rem',
               textTransform: 'uppercase',
-              letterSpacing: '0.06em',
+              letterSpacing: '0.08em',
               color: 'var(--accent-text)',
               flexShrink: 0
             }}
           >
-            Presenter Cue:
+            Catatan Presenter:
           </span>
           <span style={{ lineHeight: 1.45 }}>{slide.speakerNotes}</span>
         </div>
@@ -150,8 +170,8 @@ export const SlideViewer: React.FC<SlideViewerProps> = ({ slide, deckTitle }) =>
           color: 'var(--text-muted)'
         }}
       >
-        <span>{deckTitle}</span>
-        <span style={{ fontWeight: 600 }}>{slide.slideNumber}</span>
+        <span style={{ fontWeight: 500 }}>{deckTitle}</span>
+        <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700 }}>{slide.slideNumber}</span>
       </div>
     </div>
   );
@@ -166,17 +186,18 @@ const HeroLayout: React.FC<{ content: HeroContent; title: string; eyebrow?: stri
         <div
           style={{
             display: 'inline-flex',
-            padding: '4px 10px',
-            borderRadius: '4px',
+            padding: '5px 12px',
+            borderRadius: '6px',
             backgroundColor: 'var(--accent-surface)',
             color: 'var(--accent-text)',
-            fontSize: '0.74rem',
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: '0.75rem',
             fontWeight: 700,
-            letterSpacing: '0.08em',
+            letterSpacing: '0.12em',
             textTransform: 'uppercase',
             marginBottom: '1.25rem',
             width: 'fit-content',
-            border: '1px solid var(--border-subtle)'
+            border: '1px solid rgba(255, 255, 255, 0.08)'
           }}
         >
           {badgeText}
@@ -185,12 +206,14 @@ const HeroLayout: React.FC<{ content: HeroContent; title: string; eyebrow?: stri
 
       <h1
         style={{
-          fontSize: '3rem',
-          fontWeight: 900,
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontSize: '3.1rem',
+          fontWeight: 800,
           color: 'var(--text-primary)',
-          lineHeight: 1.18,
+          lineHeight: 1.16,
+          letterSpacing: '-0.04em',
           marginBottom: '0.75rem',
-          maxWidth: '92%'
+          maxWidth: '94%'
         }}
       >
         {content.headline || title}
@@ -200,20 +223,21 @@ const HeroLayout: React.FC<{ content: HeroContent; title: string; eyebrow?: stri
       <div
         style={{
           width: '56px',
-          height: '3.5px',
+          height: '4px',
           backgroundColor: 'var(--accent)',
-          borderRadius: '2px',
-          marginBottom: '1.25rem'
+          borderRadius: '9999px',
+          marginBottom: '1.4rem'
         }}
       />
 
       <p
         style={{
+          fontFamily: "'DM Sans', sans-serif",
           fontSize: '1.2rem',
           color: 'var(--text-secondary)',
-          lineHeight: 1.55,
+          lineHeight: 1.6,
           maxWidth: '85%',
-          marginBottom: '2rem'
+          marginBottom: '1.75rem'
         }}
       >
         {content.subheadline}
@@ -224,7 +248,8 @@ const HeroLayout: React.FC<{ content: HeroContent; title: string; eyebrow?: stri
           style={{
             fontSize: '0.9rem',
             color: 'var(--accent-text)',
-            fontWeight: 600
+            fontWeight: 600,
+            fontFamily: "'Space Grotesk', sans-serif"
           }}
         >
           {content.author}
@@ -234,7 +259,7 @@ const HeroLayout: React.FC<{ content: HeroContent; title: string; eyebrow?: stri
   );
 };
 
-// 2. Cards Layout
+// 2. Cards Layout (Gamma Frosted Nested Cards)
 const CardsLayout: React.FC<{ content: CardsContent }> = ({ content }) => {
   const cards = content.cards || [];
   return (
@@ -250,25 +275,28 @@ const CardsLayout: React.FC<{ content: CardsContent }> = ({ content }) => {
         <div
           key={idx}
           style={{
-            backgroundColor: 'var(--bg-surface-elevated)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: '6px',
-            padding: '1.5rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.035)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '14px',
+            padding: '1.6rem',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            boxShadow: '0 8px 24px -4px rgba(0, 0, 0, 0.3)',
+            transition: 'transform 0.2s ease, border-color 0.2s ease'
           }}
         >
           <div
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '6px',
+              width: '40px',
+              height: '40px',
+              borderRadius: '10px',
               backgroundColor: 'var(--accent-surface)',
               color: 'var(--accent-text)',
+              border: '1px solid rgba(255, 255, 255, 0.06)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '1rem'
+              marginBottom: '1.1rem'
             }}
           >
             {getSemanticIcon(card.iconName)}
@@ -276,10 +304,11 @@ const CardsLayout: React.FC<{ content: CardsContent }> = ({ content }) => {
 
           <h3
             style={{
-              fontSize: '1.15rem',
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '1.2rem',
               fontWeight: 700,
               color: 'var(--text-primary)',
-              marginBottom: '0.5rem',
+              marginBottom: '0.6rem',
               lineHeight: 1.3
             }}
           >
@@ -288,9 +317,10 @@ const CardsLayout: React.FC<{ content: CardsContent }> = ({ content }) => {
 
           <p
             style={{
-              fontSize: '0.9rem',
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '0.92rem',
               color: 'var(--text-secondary)',
-              lineHeight: 1.5,
+              lineHeight: 1.55,
               marginTop: 'auto'
             }}
           >
@@ -302,7 +332,7 @@ const CardsLayout: React.FC<{ content: CardsContent }> = ({ content }) => {
   );
 };
 
-// 3. Stats Layout
+// 3. Stats Layout (Gamma Bold Metric Cards)
 const StatsLayout: React.FC<{ content: StatsContent }> = ({ content }) => {
   const stats = content.stats || [];
   return (
@@ -318,25 +348,27 @@ const StatsLayout: React.FC<{ content: StatsContent }> = ({ content }) => {
         <div
           key={idx}
           style={{
-            backgroundColor: 'var(--bg-surface-elevated)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: '6px',
-            padding: '1.75rem 1.25rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.035)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '14px',
+            padding: '2rem 1.4rem',
             textAlign: 'center',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            boxShadow: '0 8px 24px -4px rgba(0, 0, 0, 0.3)'
           }}
         >
           <div
-            className="font-mono"
             style={{
-              fontSize: '2.8rem',
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '3.4rem',
               fontWeight: 800,
-              color: 'var(--accent-text)',
-              lineHeight: 1.1,
-              marginBottom: '0.5rem'
+              color: 'var(--accent)',
+              lineHeight: 1,
+              letterSpacing: '-0.04em',
+              marginBottom: '0.6rem'
             }}
           >
             {stat.value}
@@ -344,10 +376,13 @@ const StatsLayout: React.FC<{ content: StatsContent }> = ({ content }) => {
 
           <div
             style={{
-              fontSize: '1rem',
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '0.92rem',
               fontWeight: 700,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
               color: 'var(--text-primary)',
-              marginBottom: '0.35rem'
+              marginBottom: '0.4rem'
             }}
           >
             {stat.label}
@@ -355,10 +390,11 @@ const StatsLayout: React.FC<{ content: StatsContent }> = ({ content }) => {
 
           <div
             style={{
-              fontSize: '0.85rem',
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '0.88rem',
               color: 'var(--text-secondary)',
-              lineHeight: 1.45,
-              maxWidth: '90%'
+              lineHeight: 1.5,
+              maxWidth: '92%'
             }}
           >
             {stat.description}
@@ -369,7 +405,7 @@ const StatsLayout: React.FC<{ content: StatsContent }> = ({ content }) => {
   );
 };
 
-// 4. Timeline Layout
+// 4. Timeline Layout (Connected Milestones)
 const TimelineLayout: React.FC<{ content: TimelineContent }> = ({ content }) => {
   const steps = content.steps || [];
   return (
@@ -377,7 +413,7 @@ const TimelineLayout: React.FC<{ content: TimelineContent }> = ({ content }) => 
       style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${steps.length}, 1fr)`,
-        gap: '1rem',
+        gap: '1.1rem',
         width: '100%'
       }}
     >
@@ -385,47 +421,58 @@ const TimelineLayout: React.FC<{ content: TimelineContent }> = ({ content }) => 
         <div
           key={idx}
           style={{
-            backgroundColor: 'var(--bg-surface-elevated)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: '6px',
-            padding: '1.25rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.035)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '14px',
+            padding: '1.5rem',
             display: 'flex',
             flexDirection: 'column',
-            position: 'relative'
+            position: 'relative',
+            boxShadow: '0 8px 24px -4px rgba(0, 0, 0, 0.3)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.9rem' }}>
             <span
-              className="font-mono"
               style={{
+                fontFamily: "'Space Grotesk', sans-serif",
                 fontSize: '0.85rem',
                 fontWeight: 800,
                 color: 'var(--accent-text)',
                 backgroundColor: 'var(--accent-surface)',
-                padding: '2px 8px',
-                borderRadius: '4px'
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                padding: '3px 10px',
+                borderRadius: '6px'
               }}
             >
               {item.step}
             </span>
             {idx < steps.length - 1 && (
-              <ArrowRight size={14} style={{ color: 'var(--text-muted)' }} />
+              <ArrowRight size={15} style={{ color: 'var(--text-muted)' }} />
             )}
           </div>
 
           <h4
             style={{
-              fontSize: '1.05rem',
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '1.12rem',
               fontWeight: 700,
               color: 'var(--text-primary)',
-              marginBottom: '0.4rem',
+              marginBottom: '0.5rem',
               lineHeight: 1.3
             }}
           >
             {item.title}
           </h4>
 
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginTop: 'auto' }}>
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '0.88rem',
+              color: 'var(--text-secondary)',
+              lineHeight: 1.55,
+              marginTop: 'auto'
+            }}
+          >
             {item.description}
           </p>
         </div>
@@ -434,30 +481,33 @@ const TimelineLayout: React.FC<{ content: TimelineContent }> = ({ content }) => 
   );
 };
 
-// 5. Callout Layout
+// 5. Callout Layout (Gamma Thesis Card)
 const CalloutLayout: React.FC<{ content: CalloutContent }> = ({ content }) => {
   return (
     <div
       style={{
-        backgroundColor: 'var(--bg-surface-elevated)',
-        border: '1px solid var(--border-subtle)',
+        backgroundColor: 'rgba(255, 255, 255, 0.035)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
         borderLeft: '4px solid var(--accent)',
-        borderRadius: '6px',
-        padding: '2.25rem'
+        borderRadius: '16px',
+        padding: '2.5rem',
+        boxShadow: '0 12px 32px -6px rgba(0, 0, 0, 0.4)'
       }}
     >
       {content.highlightBadge && (
-        <div style={{ marginBottom: '1rem' }}>
+        <div style={{ marginBottom: '1.25rem' }}>
           <span
             style={{
-              fontSize: '0.72rem',
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '0.74rem',
               fontWeight: 700,
+              letterSpacing: '0.12em',
               textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              padding: '3px 8px',
-              borderRadius: '4px',
+              padding: '4px 10px',
+              borderRadius: '6px',
               backgroundColor: 'var(--accent-surface)',
-              color: 'var(--accent-text)'
+              color: 'var(--accent-text)',
+              border: '1px solid rgba(255, 255, 255, 0.08)'
             }}
           >
             {content.highlightBadge}
@@ -466,22 +516,41 @@ const CalloutLayout: React.FC<{ content: CalloutContent }> = ({ content }) => {
       )}
 
       <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
-        <Quote size={32} style={{ color: 'var(--accent)', flexShrink: 0, opacity: 0.9 }} />
-        <div>
-          <blockquote
+        <div
+          style={{
+            color: 'var(--accent)',
+            flexShrink: 0,
+            padding: '8px',
+            backgroundColor: 'var(--accent-surface)',
+            borderRadius: '10px'
+          }}
+        >
+          <Quote size={28} />
+        </div>
+
+        <div style={{ flex: 1 }}>
+          <p
             style={{
-              fontSize: '1.75rem',
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: '1.6rem',
               fontWeight: 700,
-              fontStyle: 'italic',
               color: 'var(--text-primary)',
               lineHeight: 1.35,
-              marginBottom: '0.85rem'
+              letterSpacing: '-0.025em',
+              marginBottom: '1rem'
             }}
           >
             "{content.quoteText}"
-          </blockquote>
+          </p>
 
-          <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '1.05rem',
+              color: 'var(--text-secondary)',
+              lineHeight: 1.6
+            }}
+          >
             {content.explanation}
           </p>
         </div>

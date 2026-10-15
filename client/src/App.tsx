@@ -10,7 +10,8 @@ import {
   ChevronRight,
   AlertCircle,
   Maximize2,
-  Edit3
+  Edit3,
+  MessageSquare
 } from 'lucide-react';
 
 // Default initial high-impact deck
@@ -131,6 +132,7 @@ export function App() {
   const [isExporting, setIsExporting] = useState(false);
   const [isEditingMode, setIsEditingMode] = useState(false);
   const [isRefining, setIsRefining] = useState(false);
+  const [showSpeakerNotes, setShowSpeakerNotes] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Apply theme to document body
@@ -347,6 +349,8 @@ export function App() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar
+        deckTitle={deck.title}
+        onUpdateDeckTitle={(title) => setDeck((prev) => ({ ...prev, title }))}
         onNewPresentation={() => setIsModalOpen(true)}
         onExportPPTX={handleExportPPTX}
         isExporting={isExporting}
@@ -364,8 +368,8 @@ export function App() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          padding: '2rem 1.5rem',
+          justifyContent: 'flex-start',
+          padding: '2.5rem 1.5rem 2rem 1.5rem',
           position: 'relative',
           zIndex: 1
         }}
@@ -375,7 +379,7 @@ export function App() {
           <div
             style={{
               width: '100%',
-              maxWidth: '900px',
+              maxWidth: '1060px',
               padding: '12px 18px',
               borderRadius: '12px',
               background: 'rgba(239, 68, 68, 0.15)',
@@ -400,39 +404,17 @@ export function App() {
           </div>
         )}
 
-        {/* Slide Stage Wrapper with Prev/Next Controls */}
+        {/* Centered Slide Card Stage */}
         <div
           style={{
             width: '100%',
-            maxWidth: '1280px',
+            maxWidth: '1060px',
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            gap: '1.25rem',
             position: 'relative'
           }}
         >
-          {/* Previous Button */}
-          <button
-            onClick={handlePrev}
-            disabled={currentSlideIndex === 0}
-            className="btn-secondary"
-            title="Slide Sebelumnya (Panah Kiri)"
-            style={{
-              width: '40px',
-              height: '40px',
-              padding: 0,
-              borderRadius: '6px',
-              justifyContent: 'center',
-              opacity: currentSlideIndex === 0 ? 0.3 : 1,
-              cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
-              flexShrink: 0
-            }}
-          >
-            <ChevronLeft size={20} />
-          </button>
-
-          {/* Active Slide Stage: Editor vs Viewer */}
           {currentSlide && (
             isEditingMode ? (
               <SlideEditor
@@ -449,95 +431,190 @@ export function App() {
                 onDoneEditing={() => setIsEditingMode(false)}
               />
             ) : (
-              <div style={{ position: 'relative', width: '100%', maxWidth: '1050px' }}>
-                <SlideViewer slide={currentSlide} deckTitle={deck.title} />
-                
-                {/* Quick Edit Button */}
-                <button
-                  type="button"
-                  onClick={() => setIsEditingMode(true)}
-                  className="btn-secondary"
-                  style={{
-                    position: 'absolute',
-                    top: '12px',
-                    right: '12px',
-                    padding: '5px 10px',
-                    fontSize: '0.75rem',
-                    backgroundColor: 'var(--bg-surface-elevated)'
-                  }}
-                  title="Kustomisasi teks dan layout slide ini"
-                >
-                  <Edit3 size={13} />
-                  <span>Kustomisasi Slide</span>
-                </button>
+              <div style={{ position: 'relative', width: '100%' }}>
+                <SlideViewer
+                  slide={currentSlide}
+                  deckTitle={deck.title}
+                  showSpeakerNotes={showSpeakerNotes}
+                />
               </div>
             )
           )}
+        </div>
 
-          {/* Next Button */}
-          <button
-            onClick={handleNext}
-            disabled={currentSlideIndex === deck.slides.length - 1}
-            className="btn-secondary"
-            title="Slide Selanjutnya (Panah Kanan / Space)"
+        {/* Gamma Floating Glass Pill Controller */}
+        <div
+          style={{
+            position: 'sticky',
+            bottom: '1.25rem',
+            zIndex: 35,
+            marginTop: '1.75rem',
+            display: 'flex',
+            justifyContent: 'center',
+            width: '100%',
+            pointerEvents: 'none'
+          }}
+        >
+          <div
+            className="floating-glass-bar"
             style={{
-              width: '40px',
-              height: '40px',
-              padding: 0,
-              borderRadius: '6px',
-              justifyContent: 'center',
-              opacity: currentSlideIndex === deck.slides.length - 1 ? 0.3 : 1,
-              cursor: currentSlideIndex === deck.slides.length - 1 ? 'not-allowed' : 'pointer',
-              flexShrink: 0
+              pointerEvents: 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}
           >
-            <ChevronRight size={20} />
-          </button>
+            {/* Prev Button */}
+            <button
+              onClick={handlePrev}
+              disabled={currentSlideIndex === 0}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: currentSlideIndex === 0 ? 'var(--text-muted)' : 'var(--text-primary)',
+                cursor: currentSlideIndex === 0 ? 'not-allowed' : 'pointer',
+                padding: '6px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: currentSlideIndex === 0 ? 0.35 : 1,
+                transition: 'all 0.15s ease'
+              }}
+              title="Slide Sebelumnya (Panah Kiri)"
+            >
+              <ChevronLeft size={18} />
+            </button>
+
+            {/* Slide Index Pill */}
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                color: 'var(--text-primary)',
+                padding: '3px 10px',
+                borderRadius: '9999px',
+                backgroundColor: 'var(--bg-surface-elevated)',
+                border: '1px solid var(--border-subtle)',
+                letterSpacing: '0.02em',
+                userSelect: 'none'
+              }}
+            >
+              Card {currentSlideIndex + 1} / {deck.slides.length}
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={handleNext}
+              disabled={currentSlideIndex === deck.slides.length - 1}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: currentSlideIndex === deck.slides.length - 1 ? 'var(--text-muted)' : 'var(--text-primary)',
+                cursor: currentSlideIndex === deck.slides.length - 1 ? 'not-allowed' : 'pointer',
+                padding: '6px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: currentSlideIndex === deck.slides.length - 1 ? 0.35 : 1,
+                transition: 'all 0.15s ease'
+              }}
+              title="Slide Selanjutnya (Panah Kanan / Space)"
+            >
+              <ChevronRight size={18} />
+            </button>
+
+            {/* Subtle Divider */}
+            <div style={{ width: '1px', height: '16px', backgroundColor: 'var(--border-subtle)', margin: '0 4px' }} />
+
+            {/* Presenter Notes Drawer Toggle */}
+            <button
+              type="button"
+              onClick={() => setShowSpeakerNotes(!showSpeakerNotes)}
+              style={{
+                background: showSpeakerNotes ? 'var(--accent-surface)' : 'transparent',
+                border: showSpeakerNotes ? '1px solid var(--accent)' : '1px solid transparent',
+                color: showSpeakerNotes ? 'var(--accent-text)' : 'var(--text-muted)',
+                cursor: 'pointer',
+                padding: '5px 9px',
+                borderRadius: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                fontFamily: "'DM Sans', sans-serif",
+                transition: 'all 0.15s ease'
+              }}
+              title={showSpeakerNotes ? 'Sembunyikan Catatan Presenter' : 'Tampilkan Catatan Presenter'}
+            >
+              <MessageSquare size={13} />
+              <span>Notes</span>
+            </button>
+
+            {/* Fullscreen Mode */}
+            <button
+              type="button"
+              onClick={() => {
+                if (!document.fullscreenElement) {
+                  document.documentElement.requestFullscreen().catch(() => {});
+                } else {
+                  document.exitFullscreen().catch(() => {});
+                }
+              }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--text-secondary)',
+                cursor: 'pointer',
+                padding: '6px',
+                borderRadius: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'color 0.15s ease'
+              }}
+              title="Layar Penuh (F11)"
+            >
+              <Maximize2 size={14} />
+            </button>
+
+            {/* Quick Edit Toggle */}
+            <button
+              type="button"
+              onClick={() => setIsEditingMode(!isEditingMode)}
+              style={{
+                background: isEditingMode ? 'var(--accent)' : 'var(--bg-surface-elevated)',
+                border: '1px solid var(--border-subtle)',
+                color: isEditingMode ? '#FFFFFF' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                padding: '5px 10px',
+                borderRadius: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                fontFamily: "'DM Sans', sans-serif",
+                transition: 'all 0.15s ease'
+              }}
+              title={isEditingMode ? 'Kembali ke Mode Tayang' : 'Edit Slide Ini'}
+            >
+              <Edit3 size={13} />
+              <span>{isEditingMode ? 'Tayang' : 'Edit'}</span>
+            </button>
+          </div>
         </div>
 
         {/* Thumbnail Navigation Strip */}
-        <div style={{ width: '100%', maxWidth: '900px', marginTop: '1.25rem' }}>
+        <div style={{ width: '100%', maxWidth: '1060px', marginTop: '1rem' }}>
           <ThumbnailStrip
             slides={deck.slides}
             currentIndex={currentSlideIndex}
             onSelectSlide={(idx) => setCurrentSlideIndex(idx)}
           />
-        </div>
-
-        {/* Deck Bottom Meta Controls */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            marginTop: '0.5rem',
-            color: 'var(--text-muted)',
-            fontSize: '0.8rem'
-          }}
-        >
-          <span>Navigasi: Panah Kiri / Kanan atau Spasi</span>
-          <span>•</span>
-          <button
-            onClick={() => {
-              if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
-              } else {
-                document.exitFullscreen().catch(() => {});
-              }
-            }}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--text-secondary)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '0.8rem'
-            }}
-          >
-            <Maximize2 size={13} /> Layar Penuh
-          </button>
         </div>
       </main>
 

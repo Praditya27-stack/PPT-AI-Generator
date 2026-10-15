@@ -87,17 +87,22 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '1050px', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+    <div style={{ width: '100%', maxWidth: '1060px', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
       {/* Editor Command Toolbar */}
       <div
-        className="studio-panel"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '8px',
-          padding: '0.65rem 1rem'
+          padding: '0.75rem 1.25rem',
+          backgroundColor: 'rgba(18, 21, 32, 0.9)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: '12px',
+          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.3)'
         }}
       >
         {/* Left AI Refine Tools */}
@@ -274,8 +279,10 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
               placeholder="Judul Slide (Action Statement)..."
               style={{
                 width: '100%',
-                fontSize: '1.75rem',
+                fontSize: '1.9rem',
                 fontWeight: 800,
+                fontFamily: "'Space Grotesk', sans-serif",
+                letterSpacing: '-0.035em',
                 color: 'var(--text-primary)',
                 marginBottom: '6px'
               }}
@@ -289,7 +296,8 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
               placeholder="Subjudul atau penjelasan pendukung..."
               style={{
                 width: '100%',
-                fontSize: '0.95rem',
+                fontSize: '1rem',
+                fontFamily: "'DM Sans', sans-serif",
                 color: 'var(--text-secondary)'
               }}
             />
@@ -297,10 +305,10 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
             {/* Gamma Signature Accent Divider */}
             <div
               style={{
-                width: '40px',
-                height: '3px',
+                width: '44px',
+                height: '3.5px',
                 backgroundColor: 'var(--accent)',
-                borderRadius: '2px',
+                borderRadius: '9999px',
                 marginTop: '10px'
               }}
             />
@@ -350,10 +358,13 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
           style={{
             marginTop: '1.25rem',
             marginBottom: '0.75rem',
-            padding: '0.65rem 0.95rem',
-            borderRadius: '6px',
-            backgroundColor: 'var(--surface-sunken)',
+            padding: '0.75rem 1rem',
+            borderRadius: '10px',
+            backgroundColor: 'var(--bg-surface-sunken)',
             borderLeft: '3px solid var(--accent)',
+            border: '1px solid rgba(255, 255, 255, 0.05)',
+            borderLeftWidth: '3px',
+            borderLeftColor: 'var(--accent)',
             display: 'flex',
             flexDirection: 'column',
             gap: '4px'
