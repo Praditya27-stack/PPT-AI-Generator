@@ -22,18 +22,20 @@
   --text-muted: #64748B;
   --accent: #8B5CF6;
   --accent-hover: #7C3AED;
-  --accent-surface: rgba(139, 92, 246, 0.14);
+  --accent-surface: rgba(139, 92, 246, 0.15);
   --accent-text: #A78BFA;
+  --ambient-primary: rgba(139, 92, 246, 0.22);
+  --ambient-secondary: rgba(99, 102, 241, 0.12);
   --danger: #EF4444;
   --danger-surface: rgba(239, 68, 68, 0.12);
 }
 
 /* Theme 2: Cyber Emerald */
 .theme-cyberpunk {
-  --bg-canvas: #07090C;
-  --bg-surface: #0E1317;
-  --bg-surface-elevated: #151C22;
-  --bg-surface-sunken: #090C0E;
+  --bg-canvas: #060A08;
+  --bg-surface: #0E1512;
+  --bg-surface-elevated: #14201B;
+  --bg-surface-sunken: #080D0B;
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.18);
   --text-primary: #F4F4F5;
@@ -41,16 +43,18 @@
   --text-muted: #71717A;
   --accent: #10B981;
   --accent-hover: #059669;
-  --accent-surface: rgba(16, 185, 129, 0.14);
+  --accent-surface: rgba(16, 185, 129, 0.15);
   --accent-text: #34D399;
+  --ambient-primary: rgba(16, 185, 129, 0.22);
+  --ambient-secondary: rgba(20, 184, 166, 0.12);
 }
 
 /* Theme 3: Corporate Ocean */
 .theme-corporate_blue {
-  --bg-canvas: #070B14;
+  --bg-canvas: #060B14;
   --bg-surface: #0E1626;
-  --bg-surface-elevated: #162238;
-  --bg-surface-sunken: #090E1A;
+  --bg-surface-elevated: #16243D;
+  --bg-surface-sunken: #080E1A;
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.18);
   --text-primary: #F8FAFC;
@@ -58,26 +62,30 @@
   --text-muted: #64748B;
   --accent: #3B82F6;
   --accent-hover: #2563EB;
-  --accent-surface: rgba(59, 130, 246, 0.14);
+  --accent-surface: rgba(59, 130, 246, 0.15);
   --accent-text: #60A5FA;
+  --ambient-primary: rgba(59, 130, 246, 0.22);
+  --ambient-secondary: rgba(14, 165, 233, 0.12);
 }
 
 /* Theme 4: Editorial Light (Gamma Basic Light) */
 .theme-minimal_light {
   color-scheme: light;
-  --bg-canvas: #F5F6F8;
+  --bg-canvas: #F8F9FA;
   --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #ECEEF2;
-  --bg-surface-sunken: #F0F2F5;
+  --bg-surface-elevated: #F1F3F5;
+  --bg-surface-sunken: #EAEDF1;
   --border-subtle: #E2E4E9;
   --border-strong: #CDD0D8;
   --text-primary: #11141A;
   --text-secondary: #4B5565;
   --text-muted: #8892A2;
-  --accent: #D92B2B;
-  --accent-hover: #B91C1C;
-  --accent-surface: rgba(217, 43, 43, 0.1);
-  --accent-text: #D92B2B;
+  --accent: #E11D48;
+  --accent-hover: #BE123C;
+  --accent-surface: rgba(225, 29, 72, 0.1);
+  --accent-text: #E11D48;
+  --ambient-primary: rgba(225, 29, 72, 0.08);
+  --ambient-secondary: rgba(244, 63, 94, 0.05);
 }
 
 * {
@@ -88,10 +96,15 @@
 
 body {
   background-color: var(--bg-canvas);
+  background-image: 
+    radial-gradient(ellipse 75% 55% at 50% -12%, var(--ambient-primary) 0%, transparent 75%),
+    radial-gradient(ellipse 50% 40% at 90% 80%, var(--ambient-secondary) 0%, transparent 60%),
+    radial-gradient(circle at 10% 45%, var(--ambient-secondary) 0%, transparent 40%);
+  background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Typography matching Gamma */
@@ -102,6 +115,19 @@ h1, h2, h3, h4, .font-heading {
 
 .font-mono {
   font-family: 'JetBrains Mono', monospace;
+}
+
+/* High-Impact Gradient Text */
+.text-gradient {
+  background: linear-gradient(135deg, #FFFFFF 15%, var(--accent-text) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.theme-minimal_light .text-gradient {
+  background: linear-gradient(135deg, #11141A 20%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Crisp Gamma Panel */
@@ -179,30 +205,65 @@ h1, h2, h3, h4, .font-heading {
   cursor: not-allowed;
 }
 
-/* 16:9 Slide Stage: Fluid Gamma Card with 16px border-radius */
+/* 16:9 Slide Stage: Fluid Gamma Card with 20px border-radius */
 .slide-stage-container {
   width: 100%;
-  max-width: 1060px;
-  aspect-ratio: 16 / 9;
+  max-width: 1080px;
+  min-height: 560px;
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 3rem 3.5rem;
-  background-color: var(--bg-surface);
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-surface-sunken) 100%);
   border: 1px solid var(--border-subtle);
-  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.06);
   transition: all 0.25s ease;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 @media (max-width: 900px) {
   .slide-stage-container {
-    aspect-ratio: auto;
-    min-height: 520px;
+    min-height: 500px;
     padding: 2rem 1.5rem;
-    border-radius: 12px;
+    border-radius: 14px;
   }
+}
+
+/* Frosted Dynamic Cards */
+.card-frosted {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0.015) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.card-frosted:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.5);
+}
+
+.theme-minimal_light .card-frosted {
+  background: #FFFFFF;
+  border: 1px solid #E2E4E9;
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.06);
+}
+
+.theme-minimal_light .card-frosted:hover {
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.1);
+  border-color: #CBD5E1;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.pulsing-indicator {
+  animation: pulse-subtle 2s infinite ease-in-out;
 }
 
 /* Floating Deck Controller (Bottom Pill Bar) */
