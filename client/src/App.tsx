@@ -32,7 +32,16 @@ const INITIAL_DECK: PresentationDeck = {
         headline: 'Akselerasi Pertumbuhan Eksponensial Lewat Automasi Kognitif',
         subheadline: 'Mengubah struktur biaya operasional dan mempercepat time-to-market secara fundamental.',
         badge: 'STRATEGIC BRIEFING 2026',
-        author: 'Disiapkan oleh AI Systems Architect'
+        author: 'Disiapkan oleh AI Systems Architect',
+        keyHighlights: ['ROI 4.8x Akselerasi', 'Privat Zero-Leak Data', 'Pilot 4-Minggu Teruji'],
+        visualConcept: {
+          badge: 'SYSTEM ARCHITECTURE',
+          nodes: ['Data Enterprise', '9router Tunnel', 'Gemini Flash', 'Output PPTX'],
+          metrics: [
+            { label: 'Memori VPS', value: '< 120 MB RAM' },
+            { label: 'Kecepatan Respon', value: 'Sub-Detik' }
+          ]
+        }
       }
     },
     {
@@ -48,17 +57,26 @@ const INITIAL_DECK: PresentationDeck = {
           {
             title: 'Automasi Proses Kritis',
             description: 'Memangkas siklus kerja repetitif hingga 70% dengan zero manual error.',
-            iconName: 'zap'
+            iconName: 'zap',
+            badge: 'PILAR 01',
+            highlight: '✦ Pangkas 70% Siklus Repetitif',
+            colorVariant: 'violet'
           },
           {
             title: 'Intelligence Gateway',
             description: 'Menghubungkan LLM lokal dengan database enterprise secara aman dan privat.',
-            iconName: 'cpu'
+            iconName: 'cpu',
+            badge: 'PILAR 02',
+            highlight: '✦ Akses Data Privat Zero-Leak',
+            colorVariant: 'blue'
           },
           {
             title: 'Tata Kelola & Keamanan',
             description: 'Perlindungan data sensitif sesuai regulasi privasi dengan enkripsi end-to-end.',
-            iconName: 'shield'
+            iconName: 'shield',
+            badge: 'PILAR 03',
+            highlight: '✦ Enkripsi AES-256 GCM',
+            colorVariant: 'emerald'
           }
         ]
       }
@@ -76,17 +94,26 @@ const INITIAL_DECK: PresentationDeck = {
           {
             value: '4.8x',
             label: 'Percepatan Operasional',
-            description: 'Waktu siklus deployment dan analisis data'
+            description: 'Waktu siklus deployment dan analisis data',
+            category: 'EFISIENSI WAKTU',
+            trend: '▲ 380% vs Konvensional',
+            progressPercent: 85
           },
           {
             value: '62%',
             label: 'Reduksi Beban Biaya',
-            description: 'Penghematan biaya operasional backend tahunan'
+            description: 'Penghematan biaya operasional backend tahunan',
+            category: 'REDUKSI BIAYA',
+            trend: '▼ 62% OpEx Terpangkas',
+            progressPercent: 62
           },
           {
             value: '<120MB',
             label: 'Alokasi Memori Server',
-            description: 'Arsitektur ultra-ringan anti-OOM pada NAT VPS'
+            description: 'Arsitektur ultra-ringan anti-OOM pada NAT VPS',
+            category: 'MEMORI ARSITEKTUR',
+            trend: '✔ Anti-OOM Guaranteed',
+            progressPercent: 95
           }
         ]
       }
@@ -101,9 +128,27 @@ const INITIAL_DECK: PresentationDeck = {
       speakerNotes: 'Tekankan bahwa fase audit dan pilot hanya membutuhkan 4 minggu pertama sebelum cutover penuh.',
       content: {
         steps: [
-          { step: '01', title: 'Audit & Arsitektur', description: 'Identifikasi bottleneck dan kalkulasi kapasitas RAM/GPU.' },
-          { step: '02', title: 'Pilot Gateway', description: 'Integrasi tunnel 9router dan validasi skema runtime.' },
-          { step: '03', title: 'Rollout Produksi', description: 'Distribusi pipeline generator presentasi ke end-user.' }
+          {
+            step: '01',
+            title: 'Audit & Arsitektur',
+            description: 'Identifikasi bottleneck dan kalkulasi kapasitas RAM/GPU.',
+            status: 'SELESAI',
+            deliverables: ['Kalkulasi alokasi RAM VPS & GPU budget', 'Identifikasi titik bottleneck proses manual']
+          },
+          {
+            step: '02',
+            title: 'Pilot Gateway',
+            description: 'Integrasi tunnel 9router dan validasi skema runtime.',
+            status: 'SEDANG AKTIF',
+            deliverables: ['Integrasi secure tunnel 9router privat', 'Uji validasi JSON skema Gemini Flash']
+          },
+          {
+            step: '03',
+            title: 'Rollout Produksi',
+            description: 'Distribusi pipeline generator presentasi ke end-user.',
+            status: 'TARGET Q4',
+            deliverables: ['Peluncuran generator slide ke tim operasional', 'Pemantauan konsumsi memori <120MB real-time']
+          }
         ]
       }
     },
@@ -118,7 +163,19 @@ const INITIAL_DECK: PresentationDeck = {
       content: {
         quoteText: 'Organisasi yang membangun arsitektur data adaptif hari ini akan menguasai margin pasar besok.',
         highlightBadge: 'KESIMPULAN EKSEKUTIF',
-        explanation: 'Kecepatan adopsi yang terukur menentukan kelangsungan kompetitif perusahaan di era komputasi otonom.'
+        explanation: 'Kecepatan adopsi yang terukur menentukan kelangsungan kompetitif perusahaan di era komputasi otonom.',
+        actionItems: [
+          {
+            title: 'Prioritas Eksekusi Minggu Ini',
+            description: 'Audit seluruh pipeline dokumen & eliminasi dependensi headless browser yang membebani server RAM.',
+            tag: 'SEGERA'
+          },
+          {
+            title: 'Target Pencapaian Terukur',
+            description: 'Automasi penuh alur pembuatan presentasi dengan akselerasi 4.8x dan kepatuhan memori VPS <120MB.',
+            tag: 'TARGET Q4'
+          }
+        ]
       }
     }
   ]

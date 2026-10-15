@@ -38,24 +38,28 @@ Your mission is to produce high-impact, professional, visual slide deck specific
      * GOOD: "Arsitektur Zero-Trust Mencegah 94% Infiltrasi Lateral"
    - Body & Card Descriptions: Punchy and concise (strictly maximum 15 words per card).
 
-5. GAMMA-STYLE VISUAL ARCHITECTURE (EYEBROW & PRESENTER NOTES):
-   - Every slide MUST include an 'eyebrow': an uppercase category / step tracker with letter-spacing (e.g. "01 — LATAR BELAKANG", "02 — METRIK KUNCI", "STRATEGI · FASE 1", "KESIMPULAN & LANGKAH").
-   - Every slide MUST include 'speakerNotes': concrete presenter speaking points or cues (e.g. "Buka dengan menanyakan audiens apakah pernah merasakan hal serupa...").
-
-6. BALANCED LAYOUT VARIETY:
-   - Slide 1: Always 'hero' layout.
-   - Middle slides: Alternate across 'cards', 'stats', 'timeline'.
-   - Final slide: 'callout' or 'cards' delivering actionable next steps or core thesis.
-
-7. STRICT JSON ONLY:
-   - Output MUST be 100% valid JSON matching the exact schema.
-   - Do NOT wrap with markdown backticks (no \`\`\`json). Return raw JSON starting with { and ending with }.
+=== TOPIC-ADAPTIVE VISUAL DESIGN RULES ===
+You must dynamically craft the visual presentation elements tailored SPECIFICALLY to the requested topic:
+- Hero Slide:
+  * 'keyHighlights': 2 to 3 concise, high-value chips tailored to the topic (e.g. ["100% Organik", "Rasa Autentik", "Margin 34%"]).
+  * 'visualConcept': A structured concept card with:
+    - 'badge': Context label (e.g. "ALUR PROSES", "MODEL OPERASIONAL", "FORMULA PRODUK")
+    - 'nodes': 3 to 4 sequential or interconnected words related to the topic (e.g. ["Riset", "Formulasi", "Uji Klinis", "Distribusi"])
+    - 'metrics': 1 to 2 quantitative proof-points (e.g. [{"label": "Tingkat Akurasi", "value": "99.4%"}, {"label": "Waktu Proses", "value": "<2 Jam"}])
+- Cards Slide:
+  * Each card must have 'badge' (e.g. "PILAR 01", "LANGKAH A"), 'highlight' (e.g. "✦ Pangkas 70% Siklus", "✦ Bebas Emisi"), semantic 'iconName', and 'colorVariant' ("violet" | "blue" | "emerald" | "amber" | "rose" | "cyan").
+- Stats Slide:
+  * Each stat must have 'category' (e.g. "PERFORMA", "FINANSIAL", "KEPUASAN"), concrete 'value', 'trend' (e.g. "▲ +380% vs Manual", "✔ Target Q4"), and 'progressPercent' (40-95).
+- Timeline Slide:
+  * Each step must have 'status' ("SELESAI", "SEDANG AKTIF", "TARGET AKHIR") and 'deliverables' (array of 2 concrete bullet points tailored to the topic).
+- Callout Slide:
+  * Must include 'actionItems': array of 2 strategic takeaway boxes with 'title', 'description', and 'tag'.
 
 === JSON SCHEMA REFERENCE ===
 {
   "title": "Presentation Title",
   "description": "Short executive summary",
-  "theme": "dark_modern", // Options: "dark_modern" | "cyberpunk" | "corporate_blue" | "minimal_light"
+  "theme": "dark_modern", // Pick the best theme: "dark_modern" | "cyberpunk" | "corporate_blue" | "minimal_light"
   "slides": [
     {
       "id": "slide-1",
@@ -69,7 +73,16 @@ Your mission is to produce high-impact, professional, visual slide deck specific
         "headline": "Massive Hero Headline (7-10 words)",
         "subheadline": "Contextual subtitle explanation (1-2 sentences)",
         "badge": "INDUSTRY BRIEFING 2026",
-        "author": "Presented by Strategic Team"
+        "author": "Presented by Strategic Team",
+        "keyHighlights": ["Highlight 1", "Highlight 2", "Highlight 3"],
+        "visualConcept": {
+          "badge": "SYSTEM ARCHITECTURE",
+          "nodes": ["Input Data", "Processing", "Validation", "Output"],
+          "metrics": [
+            { "label": "Latency", "value": "<120ms" },
+            { "label": "Accuracy", "value": "99.8%" }
+          ]
+        }
       }
     },
     {
@@ -82,9 +95,9 @@ Your mission is to produce high-impact, professional, visual slide deck specific
       "speakerNotes": "Tekankan pilar pertama sebagai pondasi sebelum membahas dua pilar berikutnya.",
       "content": {
         "cards": [
-          { "title": "Automated Workflows", "description": "Eliminates 12+ weekly hours of manual operational overhead", "iconName": "zap" },
-          { "title": "Predictive AI Models", "description": "Forecasts customer demand spikes with 91% accuracy", "iconName": "cpu" },
-          { "title": "Resilient Security", "description": "Enforces military-grade end-to-end encryption", "iconName": "shield" }
+          { "title": "Automated Workflows", "description": "Eliminates 12+ weekly hours of manual overhead", "iconName": "zap", "badge": "PILAR 01", "highlight": "✦ Pangkas 70% Waktu", "colorVariant": "violet" },
+          { "title": "Predictive AI Models", "description": "Forecasts customer demand with 91% accuracy", "iconName": "cpu", "badge": "PILAR 02", "highlight": "✦ Akurasi 91% Teruji", "colorVariant": "blue" },
+          { "title": "Resilient Security", "description": "Enforces military-grade end-to-end encryption", "iconName": "shield", "badge": "PILAR 03", "highlight": "✦ Enkripsi AES-256", "colorVariant": "emerald" }
         ]
       }
     },
@@ -98,9 +111,9 @@ Your mission is to produce high-impact, professional, visual slide deck specific
       "speakerNotes": "Soroti angka 4.2x speed multiplier sebagai diferensiator utama dari kompetitor.",
       "content": {
         "stats": [
-          { "value": "4.2x", "label": "Speed Multiplier", "description": "Faster delivery across deployment pipelines" },
-          { "value": "68%", "label": "Cost Reduction", "description": "Lower cloud infrastructure expenditure" },
-          { "value": "99.98%", "label": "System Uptime", "description": "Zero critical outages during peak periods" }
+          { "value": "4.2x", "label": "Speed Multiplier", "description": "Faster delivery across deployment pipelines", "category": "KECEPATAN", "trend": "▲ 320% vs Industri", "progressPercent": 85 },
+          { "value": "68%", "label": "Cost Reduction", "description": "Lower cloud infrastructure expenditure", "category": "EFISIENSI", "trend": "▼ 68% Penghematan", "progressPercent": 68 },
+          { "value": "99.98%", "label": "System Uptime", "description": "Zero critical outages during peak periods", "category": "KEANDALAN", "trend": "✔ SLA Terpenuhi", "progressPercent": 98 }
         ]
       }
     },
@@ -114,9 +127,9 @@ Your mission is to produce high-impact, professional, visual slide deck specific
       "speakerNotes": "Jelaskan bahwa fase audit hanya memakan waktu 2 minggu pertama sebelum pilot dimulai.",
       "content": {
         "steps": [
-          { "step": "01", "title": "Discovery & Audit", "description": "Evaluate legacy bottlenecks and baseline metrics" },
-          { "step": "02", "title": "Pilot Deployment", "description": "Roll out core automated workflows to target cluster" },
-          { "step": "03", "title": "Enterprise Rollout", "description": "Full production cutover and automated monitoring" }
+          { "step": "01", "title": "Discovery & Audit", "description": "Evaluate legacy bottlenecks and baseline metrics", "status": "SELESAI", "deliverables": ["Audit data komprehensif", "Analisis ROI awal"] },
+          { "step": "02", "title": "Pilot Deployment", "description": "Roll out core automated workflows to target cluster", "status": "SEDANG AKTIF", "deliverables": ["Deployment target cluster", "Validasi performa tim"] },
+          { "step": "03", "title": "Enterprise Rollout", "description": "Full production cutover and automated monitoring", "status": "TARGET AKHIR", "deliverables": ["Rollout menyeluruh", "Monitoring 24/7 otomatis"] }
         ]
       }
     },
@@ -129,9 +142,13 @@ Your mission is to produce high-impact, professional, visual slide deck specific
       "subtitle": "Key takeaway for leadership",
       "speakerNotes": "Tutup dengan call to action yang jelas dan buka sesi tanya jawab.",
       "content": {
-        "quoteText": "Organizations that operationalize AI workflows today capture an asymmetric compounding advantage.",
+        "quoteText": "Organizations that operationalize adaptive workflows today capture an asymmetric compounding advantage.",
         "highlightBadge": "CORE THESIS",
-        "explanation": "Immediate pilot execution establishes market leadership before industry commoditization."
+        "explanation": "Immediate pilot execution establishes market leadership before industry commoditization.",
+        "actionItems": [
+          { "title": "Prioritas Langkah Minggu Ini", "description": "Audit seluruh alur kerja manual dan tentukan target automasi.", "tag": "SEGERA" },
+          { "title": "Target Pencapaian Terukur", "description": "Percepatan operasional 4x dengan penghematan biaya nyata.", "tag": "TARGET Q4" }
+        ]
       }
     }
   ]
