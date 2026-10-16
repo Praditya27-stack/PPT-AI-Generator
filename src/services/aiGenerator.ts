@@ -41,30 +41,50 @@ Your mission is to produce high-impact, professional, visual slide deck specific
 === TOPIC-ADAPTIVE VISUAL DESIGN RULES ===
 You must dynamically craft the visual presentation elements tailored SPECIFICALLY to the requested topic:
 - Hero Slide:
+  * 'layoutVariant': 'split_showcase' (headline on left, visual card on right) OR 'centered_display' (grand centered executive statement).
   * 'keyHighlights': 2 to 3 concise, high-value chips tailored to the topic (e.g. ["100% Organik", "Rasa Autentik", "Margin 34%"]).
-  * 'visualConcept': A structured concept card with:
-    - 'badge': Context label (e.g. "ALUR PROSES", "MODEL OPERASIONAL", "FORMULA PRODUK")
-    - 'nodes': 3 to 4 sequential or interconnected words related to the topic (e.g. ["Riset", "Formulasi", "Uji Klinis", "Distribusi"])
-    - 'metrics': 1 to 2 quantitative proof-points (e.g. [{"label": "Tingkat Akurasi", "value": "99.4%"}, {"label": "Waktu Proses", "value": "<2 Jam"}])
+  * 'visualConcept': A structured concept card with 'badge', 'nodes' (3-4 concept terms), and 'metrics' (1-2 proof points).
 - Cards Slide:
-  * Each card must have 'badge' (e.g. "PILAR 01", "LANGKAH A"), 'highlight' (e.g. "✦ Pangkas 70% Siklus", "✦ Bebas Emisi"), semantic 'iconName', and 'colorVariant' ("violet" | "blue" | "emerald" | "amber" | "rose" | "cyan").
+  * 'layoutVariant': 'bento_featured' (1 large prominent featured card on left + 2 stacked cards on right) OR 'grid_3' (balanced 3 columns) OR 'grid_2_detailed' (2 in-depth comparison cards).
+  * Each card must have 'badge', 'highlight', semantic 'iconName', and 'colorVariant' ("violet" | "blue" | "emerald" | "amber" | "rose" | "cyan").
+- Comparison Slide ('layout': 'comparison'):
+  * 2-column comparative analysis: 'leftSide' (Problem / Conventional / Before) vs 'rightSide' (Solution / Modern / After).
+  * Each side has 'tag', 'title', 'points' (2-3 items), and 'highlight'.
 - Stats Slide:
-  * Each stat must have 'category' (e.g. "PERFORMA", "FINANSIAL", "KEPUASAN"), concrete 'value', 'trend' (e.g. "▲ +380% vs Manual", "✔ Target Q4"), and 'progressPercent' (40-95).
+  * 'layoutVariant': 'giant_highlight' (1 colossal headline stat card on left + 2 breakdown cards on right) OR 'dashboard_3' (3 balanced KPI cards).
+  * Each stat must have 'category', concrete 'value', 'trend', and 'progressPercent' (40-95).
 - Timeline Slide:
-  * Each step must have 'status' ("SELESAI", "SEDANG AKTIF", "TARGET AKHIR") and 'deliverables' (array of 2 concrete bullet points tailored to the topic).
+  * 'layoutVariant': 'horizontal_roadmap' (linear horizontal milestone track) OR 'vertical_steps' (progressive vertical milestone cards).
+  * Each step must have 'status' and 'deliverables' (array of 2 concrete deliverables).
 - Callout Slide:
+  * 'layoutVariant': 'key_takeaways' (takeaway cards) OR 'quote_matrix'.
   * Must include 'actionItems': array of 2 strategic takeaway boxes with 'title', 'description', and 'tag'.
+
+=== DYNAMIC DESIGN VARIETY (MANDATORY) ===
+Never make two slides look the same! Vary the 'layout' and 'layoutVariant' throughout the deck.
+For a 10-slide deck, use an engaging progression such as:
+1. 'hero' ('split_showcase')
+2. 'cards' ('bento_featured')
+3. 'comparison' ('default')
+4. 'stats' ('giant_highlight')
+5. 'timeline' ('horizontal_roadmap')
+6. 'cards' ('grid_3')
+7. 'stats' ('dashboard_3')
+8. 'timeline' ('vertical_steps')
+9. 'cards' ('grid_2_detailed')
+10. 'callout' ('key_takeaways')
 
 === JSON SCHEMA REFERENCE ===
 {
   "title": "Presentation Title",
   "description": "Short executive summary",
-  "theme": "dark_modern", // Pick the best theme: "dark_modern" | "cyberpunk" | "corporate_blue" | "minimal_light"
+  "theme": "dark_modern", // "dark_modern" | "cyberpunk" | "corporate_blue" | "minimal_light"
   "slides": [
     {
       "id": "slide-1",
       "slideNumber": 1,
       "layout": "hero",
+      "layoutVariant": "split_showcase",
       "eyebrow": "PRESENTASI · STRATEGI EKSEKUTIF",
       "title": "Main Action Title",
       "subtitle": "Clear supporting value proposition",
@@ -89,6 +109,7 @@ You must dynamically craft the visual presentation elements tailored SPECIFICALL
       "id": "slide-2",
       "slideNumber": 2,
       "layout": "cards",
+      "layoutVariant": "bento_featured",
       "eyebrow": "01 — PILAR STRATEGIS",
       "title": "Three Strategic Pillars",
       "subtitle": "Core execution drivers for scalable growth",
@@ -104,11 +125,36 @@ You must dynamically craft the visual presentation elements tailored SPECIFICALL
     {
       "id": "slide-3",
       "slideNumber": 3,
+      "layout": "comparison",
+      "layoutVariant": "default",
+      "eyebrow": "02 — ANALISIS KOMPARATIF",
+      "title": "Metode Konvensional vs Paradigma Baru",
+      "subtitle": "Perbandingan langsung dampak implementasi terhadap efisiensi tim",
+      "speakerNotes": "Bandingkan bottlenecks lama dengan solusi otomatisasi yang diterapkan saat ini.",
+      "content": {
+        "leftSide": {
+          "tag": "TANTANGAN LAMA",
+          "title": "Proses Manual & Terfragmentasi",
+          "points": ["Sinkronisasi manual butuh 14 jam/minggu", "Tingkat error entri data mencapai 8.2%", "Biaya operasional membengkak tiap kuartal"],
+          "highlight": "✕ Produktivitas terhambat birokrasi"
+        },
+        "rightSide": {
+          "tag": "SOLUSI TERINTEGRASI",
+          "title": "Otomasi Presisi Berbasis AI",
+          "points": ["Pemrosesan data real-time <1 detik", "Akurasi otomatisasi tervalidasi 99.4%", "Mengurangi 65% beban kerja berulang"],
+          "highlight": "✔ Akselerasi pertumbuhan bisnis 3.5x"
+        }
+      }
+    },
+    {
+      "id": "slide-4",
+      "slideNumber": 4,
       "layout": "stats",
-      "eyebrow": "02 — DAMPAK TERUKUR",
+      "layoutVariant": "giant_highlight",
+      "eyebrow": "03 — DAMPAK TERUKUR",
       "title": "Proven Performance Metrics",
       "subtitle": "Quantifiable operational impact",
-      "speakerNotes": "Soroti angka 4.2x speed multiplier sebagai diferensiator utama dari kompetitor.",
+      "speakerNotes": "Soroti angka 4.2x speed multiplier sebagai diferensiator utama.",
       "content": {
         "stats": [
           { "value": "4.2x", "label": "Speed Multiplier", "description": "Faster delivery across deployment pipelines", "category": "KECEPATAN", "trend": "▲ 320% vs Industri", "progressPercent": 85 },
@@ -118,10 +164,11 @@ You must dynamically craft the visual presentation elements tailored SPECIFICALL
       }
     },
     {
-      "id": "slide-4",
-      "slideNumber": 4,
+      "id": "slide-5",
+      "slideNumber": 5,
       "layout": "timeline",
-      "eyebrow": "03 — ROADMAP IMPLEMENTASI",
+      "layoutVariant": "horizontal_roadmap",
+      "eyebrow": "04 — ROADMAP IMPLEMENTASI",
       "title": "Phased Implementation Roadmap",
       "subtitle": "Milestones towards production maturity",
       "speakerNotes": "Jelaskan bahwa fase audit hanya memakan waktu 2 minggu pertama sebelum pilot dimulai.",
@@ -134,17 +181,18 @@ You must dynamically craft the visual presentation elements tailored SPECIFICALL
       }
     },
     {
-      "id": "slide-5",
-      "slideNumber": 5,
+      "id": "slide-6",
+      "slideNumber": 6,
       "layout": "callout",
+      "layoutVariant": "key_takeaways",
       "eyebrow": "KESIMPULAN · LANGKAH STRATEGIS",
       "title": "The Strategic Imperative",
       "subtitle": "Key takeaway for leadership",
       "speakerNotes": "Tutup dengan call to action yang jelas dan buka sesi tanya jawab.",
       "content": {
-        "quoteText": "Organizations that operationalize adaptive workflows today capture an asymmetric compounding advantage.",
+        "quoteText": "Organisasi yang mengoperasionalkan otomasi presisi hari ini memegang keunggulan kompetitif jangka panjang.",
         "highlightBadge": "CORE THESIS",
-        "explanation": "Immediate pilot execution establishes market leadership before industry commoditization.",
+        "explanation": "Eksekusi bertahap membangun fondasi pertumbuhan terukur sebelum pasar menjadi terkomoditisasi.",
         "actionItems": [
           { "title": "Prioritas Langkah Minggu Ini", "description": "Audit seluruh alur kerja manual dan tentukan target automasi.", "tag": "SEGERA" },
           { "title": "Target Pencapaian Terukur", "description": "Percepatan operasional 4x dengan penghematan biaya nyata.", "tag": "TARGET Q4" }
@@ -155,16 +203,18 @@ You must dynamically craft the visual presentation elements tailored SPECIFICALL
 }`;
 
 export async function generateDeck(options: GenerateDeckOptions): Promise<PresentationDeck> {
-  const { topic, slideCount = 6, theme = 'dark_modern', language = 'id' } = options;
+  const { topic, slideCount = 10, theme = 'dark_modern', language = 'id' } = options;
 
   const userPrompt = `Generate a high-impact presentation deck with EXACTLY ${slideCount} slides on the topic:
 Topic: "${topic}"
 Preferred Theme: "${theme}"
 Language: "${language === 'id' ? 'Bahasa Indonesia (formal, tajam, profesional, kosakata eksekutif)' : 'English (executive, concise, punchy)'}"
 
-Remember:
-- Slide 1: 'hero'
-- Include a mix of 'cards', 'stats', 'timeline', and 'callout'
+CRITICAL INSTRUCTIONS FOR VARIETY:
+- Slide 1 MUST be 'hero'.
+- Include an adaptive, varied mix of layouts: 'hero', 'cards', 'comparison', 'stats', 'timeline', 'callout'.
+- Vary the 'layoutVariant' across slides: use 'split_showcase', 'bento_featured', 'giant_highlight', 'horizontal_roadmap', 'grid_3', 'vertical_steps', 'grid_2_detailed', 'key_takeaways'.
+- NO TWO CONSECUTIVE SLIDES may have the same layout or layoutVariant!
 - Total slides: ${slideCount}
 - Return ONLY valid JSON matching the schema.`;
 
@@ -230,7 +280,7 @@ Remember:
 export interface RefineSlideOptions {
   slide: Slide;
   action: 'shorten' | 'expand' | 'rewrite' | 'change_layout';
-  targetLayout?: 'hero' | 'cards' | 'stats' | 'timeline' | 'callout';
+  targetLayout?: 'hero' | 'cards' | 'stats' | 'timeline' | 'callout' | 'comparison';
   customInstruction?: string;
   language?: 'id' | 'en';
 }

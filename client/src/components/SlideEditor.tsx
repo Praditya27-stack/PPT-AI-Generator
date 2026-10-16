@@ -5,7 +5,8 @@ import type {
   CardsContent,
   StatsContent,
   TimelineContent,
-  CalloutContent
+  CalloutContent,
+  ComparisonContent
 } from '../types/presentation';
 import {
   Scissors,
@@ -167,6 +168,57 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
               <option value="stats">Layout: Stats (Angka)</option>
               <option value="timeline">Layout: Timeline</option>
               <option value="callout">Layout: Callout</option>
+              <option value="comparison">Layout: Comparison (Perbandingan)</option>
+            </select>
+
+            {/* Layout Variant Dropdown */}
+            <select
+              value={slide.layoutVariant || 'default'}
+              disabled={isRefining}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              onChange={(e) => onUpdateSlide({ ...slide, layoutVariant: e.target.value as any })}
+              style={{
+                backgroundColor: 'var(--bg-surface-elevated)',
+                border: '1px solid var(--border-subtle)',
+                color: 'var(--accent-text)',
+                padding: '5px 8px',
+                fontSize: '0.8rem',
+                cursor: 'pointer'
+              }}
+              title="Varian visual desain"
+            >
+              <option value="default">Varian: Default</option>
+              {slide.layout === 'cards' && (
+                <>
+                  <option value="bento_featured">Bento Featured (Apple/Gamma)</option>
+                  <option value="grid_3">Grid 3 Kolom</option>
+                  <option value="grid_2_detailed">Grid 2 Kolom Detail</option>
+                </>
+              )}
+              {slide.layout === 'stats' && (
+                <>
+                  <option value="giant_highlight">Giant Highlight (1 Headline + 2 Detail)</option>
+                  <option value="dashboard_3">Dashboard 3 Metrik</option>
+                </>
+              )}
+              {slide.layout === 'timeline' && (
+                <>
+                  <option value="horizontal_roadmap">Horizontal Roadmap</option>
+                  <option value="vertical_steps">Vertical Stepped Cards</option>
+                </>
+              )}
+              {slide.layout === 'hero' && (
+                <>
+                  <option value="split_showcase">Split Diagram Showcase</option>
+                  <option value="centered_display">Centered Typography</option>
+                </>
+              )}
+              {slide.layout === 'callout' && (
+                <>
+                  <option value="quote_matrix">Quote Matrix</option>
+                  <option value="key_takeaways">Key Takeaways Cards</option>
+                </>
+              )}
             </select>
           </div>
         </div>
@@ -348,6 +400,12 @@ export const SlideEditor: React.FC<SlideEditorProps> = ({
           {slide.layout === 'callout' && (
             <EditableCalloutLayout
               content={slide.content as CalloutContent}
+              onContentChange={handleContentChange}
+            />
+          )}
+          {slide.layout === 'comparison' && (
+            <EditableComparisonLayout
+              content={slide.content as ComparisonContent}
               onContentChange={handleContentChange}
             />
           )}
@@ -878,6 +936,147 @@ const EditableCalloutLayout: React.FC<{
             }}
           />
         </div>
+      </div>
+    </div>
+  );
+};
+
+// 6. Editable Comparison Layout
+const EditableComparisonLayout: React.FC<{
+  content: ComparisonContent;
+  onContentChange: (newContent: ComparisonContent) => void;
+}> = ({ content, onContentChange }) => {
+  const left = content?.leftSide || { tag: 'TANTANGAN LAMA', title: '', points: [], highlight: '' };
+  const right = content?.rightSide || { tag: 'SOLUSI TERINTEGRASI', title: '', points: [], highlight: '' };
+
+  const handleLeftChange = (key: string, val: any) => {
+    onContentChange({
+      ...content,
+      leftSide: { ...left, [key]: val }
+    });
+  };
+
+  const handleRightChange = (key: string, val: any) => {
+    onContentChange({
+      ...content,
+      rightSide: { ...right, [key]: val }
+    });
+  };
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', width: '100%' }}>
+      {/* Left Column Editor */}
+      <div
+        style={{
+          padding: '1.5rem',
+          borderRadius: '8px',
+          border: '1px solid rgba(244, 63, 94, 0.3)',
+          backgroundColor: 'var(--bg-surface-elevated)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#FDA4AF' }}>SISI KIRI:</span>
+          <input
+            type="text"
+            value={left.tag}
+            onChange={(e) => handleLeftChange('tag', e.target.value)}
+            placeholder="Tag e.g. TANTANGAN LAMA"
+            style={{ width: '100%', padding: '4px 8px', fontSize: '0.78rem' }}
+          />
+        </div>
+
+        <input
+          type="text"
+          value={left.title}
+          onChange={(e) => handleLeftChange('title', e.target.value)}
+          placeholder="Judul Masalah/Tradisional"
+          style={{ width: '100%', fontWeight: 700, fontSize: '1.1rem' }}
+        />
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>Poin-poin Masalah:</span>
+          {left.points.map((pt, idx) => (
+            <input
+              key={idx}
+              type="text"
+              value={pt}
+              onChange={(e) => {
+                const updated = [...left.points];
+                updated[idx] = e.target.value;
+                handleLeftChange('points', updated);
+              }}
+              style={{ width: '100%', fontSize: '0.85rem' }}
+            />
+          ))}
+        </div>
+
+        <input
+          type="text"
+          value={left.highlight || ''}
+          onChange={(e) => handleLeftChange('highlight', e.target.value)}
+          placeholder="Highlight kesimpulan bawah"
+          style={{ width: '100%', fontSize: '0.78rem', marginTop: 'auto' }}
+        />
+      </div>
+
+      {/* Right Column Editor */}
+      <div
+        style={{
+          padding: '1.5rem',
+          borderRadius: '8px',
+          border: '1px solid rgba(16, 185, 129, 0.4)',
+          backgroundColor: 'var(--bg-surface-elevated)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6EE7B7' }}>SISI KANAN:</span>
+          <input
+            type="text"
+            value={right.tag}
+            onChange={(e) => handleRightChange('tag', e.target.value)}
+            placeholder="Tag e.g. SOLUSI CERDAS"
+            style={{ width: '100%', padding: '4px 8px', fontSize: '0.78rem' }}
+          />
+        </div>
+
+        <input
+          type="text"
+          value={right.title}
+          onChange={(e) => handleRightChange('title', e.target.value)}
+          placeholder="Judul Solusi/Modern"
+          style={{ width: '100%', fontWeight: 700, fontSize: '1.1rem' }}
+        />
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>Poin-poin Solusi:</span>
+          {right.points.map((pt, idx) => (
+            <input
+              key={idx}
+              type="text"
+              value={pt}
+              onChange={(e) => {
+                const updated = [...right.points];
+                updated[idx] = e.target.value;
+                handleRightChange('points', updated);
+              }}
+              style={{ width: '100%', fontSize: '0.85rem' }}
+            />
+          ))}
+        </div>
+
+        <input
+          type="text"
+          value={right.highlight || ''}
+          onChange={(e) => handleRightChange('highlight', e.target.value)}
+          placeholder="Highlight kesimpulan bawah"
+          style={{ width: '100%', fontSize: '0.78rem', marginTop: 'auto' }}
+        />
       </div>
     </div>
   );

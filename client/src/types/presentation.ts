@@ -14,14 +14,14 @@ export const HeroContentSchema = z.object({
   subheadline: z.string().describe('Clear value statement (1-2 sentences)'),
   badge: z.string().optional().describe('Category or topic pill tag'),
   author: z.string().optional().describe('Presenter or organization note'),
-  keyHighlights: z.array(z.string()).optional().describe('2-3 punchy topic-specific bullet chips (e.g. ["100% Organik", "Hemat Biaya 40%", "Selesai 3 Hari"])'),
+  keyHighlights: z.array(z.string()).optional().describe('2-3 punchy topic-specific bullet chips'),
   visualConcept: z.object({
     badge: z.string().optional().describe('Badge for the visual card, e.g. "DIAGRAM ALUR", "METRIK KUNCI", "MODEL KERJA"'),
-    nodes: z.array(z.string()).optional().describe('3-4 connected concept words tailored to the topic (e.g. ["Riset", "Desain", "Peluncuran", "Evaluasi"])'),
+    nodes: z.array(z.string()).optional().describe('3-4 connected concept words tailored to the topic'),
     metrics: z.array(z.object({
       label: z.string(),
       value: z.string()
-    })).optional().describe('1-2 key showcase metrics tailored to the topic (e.g. [{"label": "Akurasi", "value": "98%"}, {"label": "Waktu", "value": "24 Jam"}])')
+    })).optional().describe('1-2 key showcase metrics tailored to the topic')
   }).optional().describe('Visual diagram or showcase data tailored to the topic')
 });
 export type HeroContent = z.infer<typeof HeroContentSchema>;
@@ -30,7 +30,7 @@ export type HeroContent = z.infer<typeof HeroContentSchema>;
 export const CardItemSchema = z.object({
   title: z.string().describe('Sharp card title (2-5 words)'),
   description: z.string().describe('Concise insight (max 15 words)'),
-  iconName: z.string().optional().describe('Semantic icon keyword like rocket, shield, cpu, zap, bar-chart, users, heart, coffee, shopping-bag, book, check'),
+  iconName: z.string().optional().describe('Semantic icon keyword like rocket, shield, cpu, zap, bar-chart, users, heart, coffee, shopping-bag, book, check, target, star, globe'),
   badge: z.string().optional().describe('Pill badge on top of card e.g. "PILAR 01", "METODE A", "TAHAP 1"'),
   highlight: z.string().optional().describe('Concrete highlight or metric chip at bottom e.g. "✦ Menghemat 30 Jam/Bulan", "✦ Bebas Efek Samping"'),
   colorVariant: z.enum(['violet', 'blue', 'emerald', 'amber', 'rose', 'cyan']).optional().describe('Color accent personality for this card')
@@ -89,22 +89,54 @@ export const CalloutContentSchema = z.object({
 });
 export type CalloutContent = z.infer<typeof CalloutContentSchema>;
 
-// Unified Slide Schema
+// Layout 6: Comparison (New: Before vs After / Problem vs Solution)
+export const ComparisonSideSchema = z.object({
+  tag: z.string().describe('Category badge e.g. "MODEL KONVENSIONAL", "TANTANGAN LAMA"'),
+  title: z.string().describe('Title of this side'),
+  points: z.array(z.string()).min(2).max(4).describe('2-4 bullet points or characteristics'),
+  badge: z.string().optional().describe('Badge like "SEBELUM" or "SESUDAH"'),
+  highlight: z.string().optional().describe('Bottom punchy conclusion')
+});
+export type ComparisonSide = z.infer<typeof ComparisonSideSchema>;
+
+export const ComparisonContentSchema = z.object({
+  leftSide: ComparisonSideSchema.describe('Left side: Problem, Conventional, or Before'),
+  rightSide: ComparisonSideSchema.describe('Right side: Solution, Modern, or After')
+});
+export type ComparisonContent = z.infer<typeof ComparisonContentSchema>;
+
+// Unified Slide Schema with Dynamic Layout Variants
 export const SlideSchema = z.object({
   id: z.string().describe('Unique slide ID, e.g. "slide-1"'),
   slideNumber: z.number().int().positive(),
-  layout: z.enum(['hero', 'cards', 'stats', 'timeline', 'callout']),
-  eyebrow: z.string().optional().describe('Gamma-style uppercase section/category indicator (e.g. "01 — DEFINISI", "PENDAHULUAN · KESEHATAN MENTAL")'),
+  layout: z.enum(['hero', 'cards', 'stats', 'timeline', 'callout', 'comparison']),
+  layoutVariant: z.enum([
+    'default',
+    'split_showcase',
+    'centered_display',
+    'editorial_minimal',
+    'bento_featured',
+    'grid_3',
+    'grid_2_detailed',
+    'dashboard_3',
+    'giant_highlight',
+    'horizontal_roadmap',
+    'vertical_steps',
+    'quote_matrix',
+    'key_takeaways'
+  ]).optional().describe('Visual design layout variant chosen automatically by AI to ensure every slide has a distinct design'),
+  eyebrow: z.string().optional().describe('Gamma-style uppercase section/category indicator'),
   title: z.string().describe('Action-oriented slide headline'),
   subtitle: z.string().optional().describe('Supporting subtext or context'),
   speakerNotes: z.string().optional().describe('Actionable presenter notes or speaking cues for this slide'),
-  accentColor: z.string().optional().describe('Optional hex or theme tone override for this slide'),
+  accentColor: z.string().optional().describe('Optional theme tone override for this slide (violet, blue, emerald, amber, rose)'),
   content: z.union([
     HeroContentSchema,
     CardsContentSchema,
     StatsContentSchema,
     TimelineContentSchema,
-    CalloutContentSchema
+    CalloutContentSchema,
+    ComparisonContentSchema
   ])
 });
 export type Slide = z.infer<typeof SlideSchema>;
@@ -114,6 +146,6 @@ export const PresentationDeckSchema = z.object({
   title: z.string().describe('Title of the overall presentation deck'),
   description: z.string().optional().describe('Brief abstract of the presentation'),
   theme: ThemeSchema.default('dark_modern'),
-  slides: z.array(SlideSchema).min(1).max(12)
+  slides: z.array(SlideSchema).min(1).max(15)
 });
 export type PresentationDeck = z.infer<typeof PresentationDeckSchema>;

@@ -6,7 +6,8 @@ import {
   CardsContent,
   StatsContent,
   TimelineContent,
-  CalloutContent
+  CalloutContent,
+  ComparisonContent
 } from '../types/presentation.js';
 import { getTheme, ThemePalette } from '../themes/colorPalettes.js';
 
@@ -51,6 +52,9 @@ export async function exportToPPTX(deck: PresentationDeck): Promise<Buffer> {
         break;
       case 'callout':
         renderCalloutLayout(slide, slideData, theme, pptx);
+        break;
+      case 'comparison':
+        renderComparisonLayout(slide, slideData, theme, pptx);
         break;
     }
 
@@ -540,6 +544,173 @@ function renderCalloutLayout(slide: any, slideData: Slide, theme: ThemePalette, 
     color: theme.textSecondary,
     valign: 'top'
   });
+}
+
+/**
+ * 6. Comparison Layout Renderer (Before vs After / Problem vs Solution)
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function renderComparisonLayout(slide: any, slideData: Slide, theme: ThemePalette, pptx: any) {
+  const content = slideData.content as ComparisonContent;
+  if (!content || !content.leftSide || !content.rightSide) return;
+
+  const startY = 1.85;
+  const colWidth = (CONTENT_WIDTH - 0.4) / 2;
+  const colHeight = 3.2;
+
+  // Left side (Traditional / Problem / Before)
+  const leftX = MARGIN_LEFT;
+  slide.addShape(pptx.ShapeType.roundRect, {
+    x: leftX,
+    y: startY,
+    w: colWidth,
+    h: colHeight,
+    rectRadius: 0.12,
+    fill: { color: theme.cardBg },
+    line: { color: 'F43F5E', width: 1.0 }
+  });
+
+  // Left Tag Pill
+  slide.addShape(pptx.ShapeType.roundRect, {
+    x: leftX + 0.3,
+    y: startY + 0.3,
+    w: 2.2,
+    h: 0.28,
+    rectRadius: 0.06,
+    fill: { color: '3F151B' }
+  });
+  slide.addText(content.leftSide.tag.toUpperCase(), {
+    x: leftX + 0.3,
+    y: startY + 0.3,
+    w: 2.2,
+    h: 0.28,
+    fontSize: 8.5,
+    fontFace: 'Arial',
+    bold: true,
+    color: 'FDA4AF',
+    align: 'center',
+    valign: 'middle'
+  });
+
+  // Left Title
+  slide.addText(content.leftSide.title, {
+    x: leftX + 0.3,
+    y: startY + 0.72,
+    w: colWidth - 0.6,
+    h: 0.45,
+    fontSize: 16,
+    fontFace: 'Arial',
+    bold: true,
+    color: theme.textPrimary,
+    valign: 'top'
+  });
+
+  // Left Points
+  let leftPointY = startY + 1.25;
+  for (const pt of content.leftSide.points || []) {
+    slide.addText(`✕  ${pt}`, {
+      x: leftX + 0.3,
+      y: leftPointY,
+      w: colWidth - 0.6,
+      h: 0.35,
+      fontSize: 11,
+      fontFace: 'Arial',
+      color: theme.textSecondary,
+      valign: 'top'
+    });
+    leftPointY += 0.4;
+  }
+
+  // Left Highlight
+  if (content.leftSide.highlight) {
+    slide.addText(content.leftSide.highlight, {
+      x: leftX + 0.3,
+      y: startY + colHeight - 0.45,
+      w: colWidth - 0.6,
+      h: 0.3,
+      fontSize: 10,
+      fontFace: 'Arial',
+      italic: true,
+      color: 'FDA4AF'
+    });
+  }
+
+  // Right side (Modern / Solution / After)
+  const rightX = MARGIN_LEFT + colWidth + 0.4;
+  slide.addShape(pptx.ShapeType.roundRect, {
+    x: rightX,
+    y: startY,
+    w: colWidth,
+    h: colHeight,
+    rectRadius: 0.12,
+    fill: { color: theme.cardBg },
+    line: { color: '10B981', width: 1.2 }
+  });
+
+  // Right Tag Pill
+  slide.addShape(pptx.ShapeType.roundRect, {
+    x: rightX + 0.3,
+    y: startY + 0.3,
+    w: 2.2,
+    h: 0.28,
+    rectRadius: 0.06,
+    fill: { color: '064E3B' }
+  });
+  slide.addText(content.rightSide.tag.toUpperCase(), {
+    x: rightX + 0.3,
+    y: startY + 0.3,
+    w: 2.2,
+    h: 0.28,
+    fontSize: 8.5,
+    fontFace: 'Arial',
+    bold: true,
+    color: '6EE7B7',
+    align: 'center',
+    valign: 'middle'
+  });
+
+  // Right Title
+  slide.addText(content.rightSide.title, {
+    x: rightX + 0.3,
+    y: startY + 0.72,
+    w: colWidth - 0.6,
+    h: 0.45,
+    fontSize: 16,
+    fontFace: 'Arial',
+    bold: true,
+    color: theme.textPrimary,
+    valign: 'top'
+  });
+
+  // Right Points
+  let rightPointY = startY + 1.25;
+  for (const pt of content.rightSide.points || []) {
+    slide.addText(`✔  ${pt}`, {
+      x: rightX + 0.3,
+      y: rightPointY,
+      w: colWidth - 0.6,
+      h: 0.35,
+      fontSize: 11,
+      fontFace: 'Arial',
+      color: theme.textSecondary,
+      valign: 'top'
+    });
+    rightPointY += 0.4;
+  }
+
+  // Right Highlight
+  if (content.rightSide.highlight) {
+    slide.addText(content.rightSide.highlight, {
+      x: rightX + 0.3,
+      y: startY + colHeight - 0.45,
+      w: colWidth - 0.6,
+      h: 0.3,
+      fontSize: 10,
+      fontFace: 'Arial',
+      bold: true,
+      color: '34D399'
+    });
+  }
 }
 
 /**

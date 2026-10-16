@@ -24,6 +24,7 @@ const INITIAL_DECK: PresentationDeck = {
       id: 'slide-1',
       slideNumber: 1,
       layout: 'hero',
+      layoutVariant: 'split_showcase',
       eyebrow: 'PRESENTASI · STRATEGI EKSEKUTIF 2026',
       title: 'AI Mendorong Nilai Tambah Ekonomi Nasional 2026',
       subtitle: 'Transformasi dari eksperimen parsial menuju integrasi ekosistem AI enterprise berskala penuh.',
@@ -48,33 +49,34 @@ const INITIAL_DECK: PresentationDeck = {
       id: 'slide-2',
       slideNumber: 2,
       layout: 'cards',
-      eyebrow: '01 — PILAR ARSITEKTUR',
-      title: 'Tiga Pilar Utama Integrasi AI Terarah',
-      subtitle: 'Fondasi arsitektural untuk memastikan return on investment yang nyata',
-      speakerNotes: 'Jelaskan mengapa ketiga pilar ini harus diimplementasikan bersamaan untuk mencegah kebocoran data dan pembengkakan biaya.',
+      layoutVariant: 'bento_featured',
+      eyebrow: '01 — PILAR ARSITEKTUR BENTO',
+      title: 'Struktur Fondasi Berorientasi Performa Tinggi',
+      subtitle: 'Integrasi arsitektural asimetris untuk memaksimalisir kecepatan tanpa kompromi keamanan.',
+      speakerNotes: 'Soroti kartu utama Automasi Proses Kritis di sisi kiri sebagai penggerak utama efisiensi.',
       content: {
         cards: [
           {
-            title: 'Automasi Proses Kritis',
-            description: 'Memangkas siklus kerja repetitif hingga 70% dengan zero manual error.',
+            title: 'Automasi Proses Kritis Terpusat',
+            description: 'Memangkas siklus kerja berulang hingga 70% dengan validasi data real-time bebas human error.',
             iconName: 'zap',
-            badge: 'PILAR 01',
+            badge: 'PILAR UTAMA',
             highlight: '✦ Pangkas 70% Siklus Repetitif',
             colorVariant: 'violet'
           },
           {
-            title: 'Intelligence Gateway',
-            description: 'Menghubungkan LLM lokal dengan database enterprise secara aman dan privat.',
+            title: 'Intelligence Gateway Ringan',
+            description: 'Menghubungkan LLM lokal dengan basis data enterprise secara privat.',
             iconName: 'cpu',
-            badge: 'PILAR 02',
-            highlight: '✦ Akses Data Privat Zero-Leak',
+            badge: 'MODUL 02',
+            highlight: '✦ Latensi Query <12ms',
             colorVariant: 'blue'
           },
           {
-            title: 'Tata Kelola & Keamanan',
-            description: 'Perlindungan data sensitif sesuai regulasi privasi dengan enkripsi end-to-end.',
+            title: 'Protokol Keamanan Zero-Trust',
+            description: 'Enkripsi data berlapis menjamin kepatuhan penuh regulasi privasi.',
             iconName: 'shield',
-            badge: 'PILAR 03',
+            badge: 'MODUL 03',
             highlight: '✦ Enkripsi AES-256 GCM',
             colorVariant: 'emerald'
           }
@@ -84,70 +86,69 @@ const INITIAL_DECK: PresentationDeck = {
     {
       id: 'slide-3',
       slideNumber: 3,
-      layout: 'stats',
-      eyebrow: '02 — DAMPAK TERUKUR',
-      title: 'Metrik Efisiensi & Dampak Finansial Terukur',
-      subtitle: 'Kompilasi tolok ukur implementasi arsitektur AI modern',
-      speakerNotes: 'Arahkan perhatian audiens ke metrik 4.8x akselerasi dan kepatuhan memori <120MB yang membuktikan efisiensi ekstrem.',
+      layout: 'comparison',
+      layoutVariant: 'default',
+      eyebrow: '02 — ANALISIS KOMPARATIF',
+      title: 'Bottleneck Konvensional vs Efisiensi Platform AI',
+      subtitle: 'Perbandingan langsung dampak transisi sistem terhadap produktivitas tim dan biaya operasional',
+      speakerNotes: 'Tekankan perbedaan mendasar antara workflow manual yang lambat dengan pipeline otomatisasi.',
       content: {
-        stats: [
-          {
-            value: '4.8x',
-            label: 'Percepatan Operasional',
-            description: 'Waktu siklus deployment dan analisis data',
-            category: 'EFISIENSI WAKTU',
-            trend: '▲ 380% vs Konvensional',
-            progressPercent: 85
-          },
-          {
-            value: '62%',
-            label: 'Reduksi Beban Biaya',
-            description: 'Penghematan biaya operasional backend tahunan',
-            category: 'REDUKSI BIAYA',
-            trend: '▼ 62% OpEx Terpangkas',
-            progressPercent: 62
-          },
-          {
-            value: '<120MB',
-            label: 'Alokasi Memori Server',
-            description: 'Arsitektur ultra-ringan anti-OOM pada NAT VPS',
-            category: 'MEMORI ARSITEKTUR',
-            trend: '✔ Anti-OOM Guaranteed',
-            progressPercent: 95
-          }
-        ]
+        leftSide: {
+          tag: 'METODE KONVENSIONAL',
+          title: 'Alur Kerja Manual Terfragmentasi',
+          points: [
+            'Sinkronisasi lintas tim memakan 14+ jam kerja per minggu',
+            'Tingkat kesalahan input data manual rata-rata mencapai 7.8%',
+            'Ketergantungan server headless browser boros memori (1.5GB+ RAM)'
+          ],
+          highlight: '✕ Skalabilitas terhambat limit memori dan biaya tinggi'
+        },
+        rightSide: {
+          tag: 'ARSITEKTUR ADAPTIF AI',
+          title: 'Pemrosesan Cerdas Berbasis Stream',
+          points: [
+            'Automasi pembuatan dokumen selesai dalam tempo hitungan detik',
+            'Validasi skema terpadu menjamin zero data drift dan konsistensi',
+            'Ekspor native pure-JS pptxgenjs beroperasi pada <120MB RAM'
+          ],
+          highlight: '✔ Efisiensi biaya 62% dengan jaminan anti-OOM server'
+        }
       }
     },
     {
       id: 'slide-4',
       slideNumber: 4,
-      layout: 'timeline',
-      eyebrow: '03 — ROADMAP IMPLEMENTASI',
-      title: 'Roadmap Eksekusi Multi-Tahap Menuju Skalabilitas',
-      subtitle: 'Tahapan sistematis migrasi proses konvensional ke platform AI',
-      speakerNotes: 'Tekankan bahwa fase audit dan pilot hanya membutuhkan 4 minggu pertama sebelum cutover penuh.',
+      layout: 'stats',
+      layoutVariant: 'giant_highlight',
+      eyebrow: '03 — DAMPAK METRIK UTAMA',
+      title: 'Peningkatan Kapabilitas Operasional Nyata',
+      subtitle: 'Kuantifikasi akselerasi deliverable proyek dan konsumsi sumber daya komputasi',
+      speakerNotes: 'Tunjukkan angka 4.8x sebagai pencapaian utama tim dalam kuartal terakhir.',
       content: {
-        steps: [
+        stats: [
           {
-            step: '01',
-            title: 'Audit & Arsitektur',
-            description: 'Identifikasi bottleneck dan kalkulasi kapasitas RAM/GPU.',
-            status: 'SELESAI',
-            deliverables: ['Kalkulasi alokasi RAM VPS & GPU budget', 'Identifikasi titik bottleneck proses manual']
+            value: '4.8x',
+            label: 'Akselerasi Kecepatan Eksekusi',
+            description: 'Peningkatan kecepatan delivery dari brief menjadi presentasi siap tayang.',
+            category: 'METRIK PERFORMA KUNCI',
+            trend: '▲ 380% vs Manual',
+            progressPercent: 92
           },
           {
-            step: '02',
-            title: 'Pilot Gateway',
-            description: 'Integrasi tunnel 9router dan validasi skema runtime.',
-            status: 'SEDANG AKTIF',
-            deliverables: ['Integrasi secure tunnel 9router privat', 'Uji validasi JSON skema Gemini Flash']
+            value: '62%',
+            label: 'Reduksi Beban OpEx',
+            description: 'Penurunan belanja komputasi server tahunan.',
+            category: 'PENGHEMATAN BIAYA',
+            trend: '▼ 62% Terpangkas',
+            progressPercent: 62
           },
           {
-            step: '03',
-            title: 'Rollout Produksi',
-            description: 'Distribusi pipeline generator presentasi ke end-user.',
-            status: 'TARGET Q4',
-            deliverables: ['Peluncuran generator slide ke tim operasional', 'Pemantauan konsumsi memori <120MB real-time']
+            value: '<120MB',
+            label: 'Kepatuhan Memori Server',
+            description: 'Footprint memori ultra-efisien tanpa crash.',
+            category: 'INTEGRITAS SISTEM',
+            trend: '✔ Zero-OOM Garansi',
+            progressPercent: 98
           }
         ]
       }
@@ -155,25 +156,189 @@ const INITIAL_DECK: PresentationDeck = {
     {
       id: 'slide-5',
       slideNumber: 5,
-      layout: 'callout',
-      eyebrow: 'KESIMPULAN · LANGKAH STRATEGIS',
-      title: 'Urgensi Kepemimpinan di Lanskap AI 2026',
-      subtitle: 'Konklusi strategis bagi para pembuat keputusan',
-      speakerNotes: 'Tutup dengan ajakan bertindak jelas untuk memulai asesmen infrastruktur awal minggu ini.',
+      layout: 'timeline',
+      layoutVariant: 'horizontal_roadmap',
+      eyebrow: '04 — ROADMAP EKSEKUSI',
+      title: 'Tiga Tahap Penerapan Menuju Skalabilitas Penuh',
+      subtitle: 'Milestone operasional bertahap yang terukur dengan risiko terkelola',
+      speakerNotes: 'Jelaskan bahwa fase audit hanya butuh 2 minggu sebelum pilot testing dimulai.',
       content: {
-        quoteText: 'Organisasi yang membangun arsitektur data adaptif hari ini akan menguasai margin pasar besok.',
-        highlightBadge: 'KESIMPULAN EKSEKUTIF',
-        explanation: 'Kecepatan adopsi yang terukur menentukan kelangsungan kompetitif perusahaan di era komputasi otonom.',
-        actionItems: [
+        steps: [
           {
-            title: 'Prioritas Eksekusi Minggu Ini',
-            description: 'Audit seluruh pipeline dokumen & eliminasi dependensi headless browser yang membebani server RAM.',
-            tag: 'SEGERA'
+            step: '01',
+            title: 'Audit & Penyiapan Pipeline',
+            description: 'Pemetaan proses bisnis dan kalibrasi endpoint AI.',
+            status: 'SELESAI',
+            deliverables: ['Audit alokasi RAM VPS budget', 'Integrasi tunnel 9router privat']
           },
           {
-            title: 'Target Pencapaian Terukur',
-            description: 'Automasi penuh alur pembuatan presentasi dengan akselerasi 4.8x dan kepatuhan memori VPS <120MB.',
-            tag: 'TARGET Q4'
+            step: '02',
+            title: 'Pilot Deployment Terbatas',
+            description: 'Uji coba live generator pada tim internal terpilih.',
+            status: 'SEDANG AKTIF',
+            deliverables: ['Validasi output PPTX native', 'Pengujian skema JSON dinamis']
+          },
+          {
+            step: '03',
+            title: 'Rollout Produksi Nasional',
+            description: 'Deployment menyeluruh ke seluruh unit kerja.',
+            status: 'TARGET Q4',
+            deliverables: ['Peluncuran editor Gamma-style', 'Monitoring utilisasi 24/7']
+          }
+        ]
+      }
+    },
+    {
+      id: 'slide-6',
+      slideNumber: 6,
+      layout: 'cards',
+      layoutVariant: 'grid_3',
+      eyebrow: '05 — STANDAR KUALITAS KONTEN',
+      title: 'Tiga Prinsip Tata Kelola Konten Anti-Slop',
+      subtitle: 'Standar editorial ketat untuk menghasilkan materi berbobot eksekutif',
+      speakerNotes: 'Tekankan komitmen terhadap fakta konkret dan penolakan terhadap jargon AI klise.',
+      content: {
+        cards: [
+          {
+            title: 'Bebas Jargon Klise AI',
+            description: 'Menghapus kata-kata hampa seperti delve, elevate, dan revolutionary demi pesan yang presisi.',
+            iconName: 'book',
+            badge: 'PRINSIP 01',
+            highlight: '✦ Kosakata Lugas & Faktual',
+            colorVariant: 'amber'
+          },
+          {
+            title: 'Bukti Data Sebelum Klaim',
+            description: 'Setiap poin wajib didukung data metrik kuantitatif terverifikasi.',
+            iconName: 'target',
+            badge: 'PRINSIP 02',
+            highlight: '✦ 100% Berbasis Metrik Riil',
+            colorVariant: 'cyan'
+          },
+          {
+            title: 'Desain Tipografi Berkelas',
+            description: 'Struktur visual hirarkis bergaya editorial dengan kontras rasio WCAG AAA.',
+            iconName: 'award',
+            badge: 'PRINSIP 03',
+            highlight: '✦ Font Space Grotesk & DM Sans',
+            colorVariant: 'rose'
+          }
+        ]
+      }
+    },
+    {
+      id: 'slide-7',
+      slideNumber: 7,
+      layout: 'stats',
+      layoutVariant: 'dashboard_3',
+      eyebrow: '06 — BENCHMARK KEHANDALAN',
+      title: 'Dashboard Kehandalan Layanan Real-Time',
+      subtitle: 'Evaluasi berkala terhadap integritas transmisi dan kepuasan pengguna',
+      speakerNotes: 'Uptime 99.98% membuktikan kehandalan infrastruktur backend express.',
+      content: {
+        stats: [
+          {
+            value: '99.98%',
+            label: 'Ketersediaan Sistem SLA',
+            description: 'Toleransi downtime nol pada jam kerja sibuk.',
+            category: 'UPTIME SERVER',
+            trend: '✔ SLA Terpenuhi',
+            progressPercent: 99
+          },
+          {
+            value: '1.2s',
+            label: 'Latensi Generasi Slide',
+            description: 'Respon cepat Gemini 3.8 Flash melalui router.',
+            category: 'RESPON WAKTU',
+            trend: '▲ 4x Lebih Cepat',
+            progressPercent: 88
+          },
+          {
+            value: '94.6%',
+            label: 'Tingkat Kepuasan Pengguna',
+            description: 'Rating approval dari eksekutif dan presenter.',
+            category: 'USER SATISFACTION',
+            trend: '▲ Rekor Tertinggi',
+            progressPercent: 95
+          }
+        ]
+      }
+    },
+    {
+      id: 'slide-8',
+      slideNumber: 8,
+      layout: 'timeline',
+      layoutVariant: 'vertical_steps',
+      eyebrow: '07 — TAHAP PROGRESSIF BERJENJANG',
+      title: 'Milestone Pencapaian Progresif Tim Operasional',
+      subtitle: 'Alur eskalasi bertingkat dengan milestone deliverable jelas di tiap level',
+      speakerNotes: 'Tunjukkan bagaimana setiap tahap bertingkat mengunci pencapaian sebelumnya.',
+      content: {
+        steps: [
+          {
+            step: 'L1',
+            title: 'Standarisasi Fondasi',
+            description: 'Penyusunan kamus token desain dan skema Zod terverifikasi.',
+            status: 'TERLAKSANA',
+            deliverables: ['Penyelarasan palet warna', 'Penetapan batas 2GB RAM budget']
+          },
+          {
+            step: 'L2',
+            title: 'Automasi Visual Terpadu',
+            description: 'Implementasi Bento Grid, perbandingan komparatif, dan metrik raksasa.',
+            status: 'SEDANG AKTIF',
+            deliverables: ['Rendering 6 variasi layout dinamis', 'Ekspor PowerPoint pptxgenjs']
+          },
+          {
+            step: 'L3',
+            title: 'Ekspansi Skala Penuh',
+            description: 'Kemitraan strategis dan integrasi API menyeluruh.',
+            status: 'TARGET Q1 2027',
+            deliverables: ['Integrasi webhook otomatis', 'Adopsi 10.000+ presentasi bulanan']
+          }
+        ]
+      }
+    },
+    {
+      id: 'slide-9',
+      layout: 'hero',
+      layoutVariant: 'centered_display',
+      slideNumber: 9,
+      eyebrow: '08 — VISI MASA DEPAN EKSEKUTIF',
+      title: 'Membangun Kemandirian Arsitektur Komputasi Cerdas',
+      subtitle: 'Mewujudkan era baru efisiensi operasional dengan teknologi yang tangkas, hemat energi, dan mandiri.',
+      speakerNotes: 'Slide penutup sebelum call-to-action untuk menyatukan komitmen seluruh jajaran kepemimpinan.',
+      content: {
+        headline: 'Efisiensi Tanpa Batas Melalui Rekayasa Perangkat Lunak Presisi',
+        subheadline: 'Menggabungkan kecerdasan model bahasa mutakhir dengan arsitektur memori rendah untuk dampak ekonomi berkelanjutan.',
+        badge: 'VISI STRATEGIS 2026',
+        author: 'Dewan Transformasi Digital',
+        keyHighlights: ['Efisiensi Komputasi 10x', 'Zero Dependensi Vendor Berat', 'Kedaulatan Data Terjamin']
+      }
+    },
+    {
+      id: 'slide-10',
+      slideNumber: 10,
+      layout: 'callout',
+      layoutVariant: 'key_takeaways',
+      eyebrow: '09 — KESIMPULAN & LANGKAH AKSI',
+      title: 'Langkah Nyata Kepemimpinan Hari Ini',
+      subtitle: 'Rangkuman eksekutif dan prioritas tindakan strategis yang harus segera dijalankan',
+      speakerNotes: 'Tutup presentasi dengan memberikan mandat yang jelas kepada audiens untuk mengambil tindakan.',
+      content: {
+        quoteText: 'Inovasi sejati bukan tentang seberapa besar model yang digunakan, melainkan seberapa presisi dampak nyata yang diciptakan.',
+        highlightBadge: 'KESIMPULAN EKSEKUTIF',
+        explanation: 'Eksekusi terarah hari ini mengamankan posisi pasar dan menghasilkan marjin efisiensi berlipat ganda.',
+        actionItems: [
+          {
+            title: 'Audit Beban Infrastruktur',
+            description: 'Pangkas dependensi browser berat dan terapkan pipeline dokumen berbasis stream.',
+            tag: 'PRIORITAS 1'
+          },
+          {
+            title: 'Standardisasi Konten Kualitas Tinggi',
+            description: 'Gunakan panduan Anti-Slop untuk memastikan presentasi fokus pada metrik dan substansi bisnis.',
+            tag: 'PRIORITAS 2'
           }
         ]
       }
@@ -310,6 +475,7 @@ export function App() {
       id: `slide-${Date.now()}`,
       slideNumber: newSlideNumber,
       layout: 'cards',
+      layoutVariant: 'default',
       title: 'Judul Analisis Tambahan',
       subtitle: 'Rincian aspek pendukung untuk memperkuat argumen presentasi',
       content: {

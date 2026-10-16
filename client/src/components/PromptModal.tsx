@@ -23,7 +23,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({
   isLoading
 }) => {
   const [topic, setTopic] = useState('');
-  const [slideCount, setSlideCount] = useState(6);
+  const [slideCount, setSlideCount] = useState(10);
   const [theme, setTheme] = useState<PresentationTheme>('dark_modern');
   const [language, setLanguage] = useState<'id' | 'en'>('id');
 
@@ -210,11 +210,11 @@ export const PromptModal: React.FC<PromptModalProps> = ({
                 disabled={isLoading}
                 style={{ width: '100%', fontSize: '0.85rem' }}
               >
-                <option value={4}>4 Slide</option>
-                <option value={5}>5 Slide</option>
-                <option value={6}>6 Slide (Standar)</option>
+                <option value={10}>10 Slide (Rekomendasi - Desain Adaptif)</option>
                 <option value={8}>8 Slide</option>
-                <option value={10}>10 Slide</option>
+                <option value={6}>6 Slide</option>
+                <option value={12}>12 Slide</option>
+                <option value={4}>4 Slide</option>
               </select>
             </div>
 
